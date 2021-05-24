@@ -1,5 +1,5 @@
-#ifndef A2100_PCALC_PARSER_EXCEPTIONS
-#define A2100_PCALC_PARSER_EXCEPTIONS   1
+#ifndef A2100_PCALC_TOKEN_EXCEPTIONS
+#define A2100_PCALC_TOKEN_EXCEPTIONS   1
 
 /**
  * This module contains expressions thrown by the token library.
