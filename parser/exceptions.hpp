@@ -11,21 +11,49 @@
 class Divide_by_zero : std::exception
 {
 public:
-    Divide_by_zero(std::string)
+    Divide_by_zero(const std::string& s = "")
+        : what_err{s}
     {
     }
+
+    const char* what() const noexcept
+    {
+        return what_err.c_str();
+    }
+private:
+    const std::string& what_err;
 };
 
 class Unmatched_parentheses : std::exception
 {
+public:
+    Unmatched_parentheses(const std::string& s = "")
+        : what_err{s}
+    {
+    }
+
+    const char* what() const noexcept
+    {
+        return what_err.c_str();
+    }
+private:
+    const std::string& what_err;
 };
 
 class Syntax_error : std::exception
 {
 public:
-    Syntax_error(std::string)
+    Syntax_error(const std::string& s = "")
+        : what_err{s}
     {
     }
+
+    const char* what() const noexcept
+    {
+        return what_err.c_str();
+    }
+private:
+    const std::string& what_err;
 };
 
 #endif

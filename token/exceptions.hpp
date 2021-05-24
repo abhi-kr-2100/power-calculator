@@ -6,13 +6,22 @@
 */
 
 #include <stdexcept>
+#include <string>
 
 class Unknown_token : std::exception
 {
 public:
-    Unknown_token(char)
+    Unknown_token(const std::string& s = "")
+        : what_err{s}
     {
     }
+
+    const char* what() const noexcept
+    {
+        return what_err.c_str();
+    }
+private:
+    const std::string& what_err;
 };
 
 #endif

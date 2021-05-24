@@ -41,7 +41,7 @@ std::vector<Token> tokenize(const std::string& expr)
             break;
         }
         default:
-            throw Unknown_token{ch};
+            throw Unknown_token{"Unknown token."};
         }
     }
 
