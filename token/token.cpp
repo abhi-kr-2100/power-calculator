@@ -18,12 +18,7 @@ std::vector<Token> tokenize(const std::string& expr)
         case '/':
         case '(':
         case ')':
-            toks.push_back(
-                Token{
-                    .kind = Token_type::operator_type,
-                    .op = ch
-                }
-            );
+            toks.push_back({.kind = Token_type::operator_type, .op = ch});
             break;
         case '.':
         case '0':
@@ -37,16 +32,12 @@ std::vector<Token> tokenize(const std::string& expr)
         case '8':
         case '9':
         {
+            // read entire number
             ss.putback(ch);
             double v;
             ss >> v;
 
-            toks.push_back(
-                Token{
-                    .kind = Token_type::number,
-                    .val = v
-                }
-            );
+            toks.push_back({.kind = Token_type::number, .val = v});
             break;
         }
         default:
