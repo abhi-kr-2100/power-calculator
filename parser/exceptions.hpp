@@ -11,7 +11,7 @@
 class Divide_by_zero : std::exception
 {
 public:
-    Divide_by_zero(const std::string& s = "")
+    Divide_by_zero(std::string s = "")
         : what_err{s}
     {
     }
@@ -21,13 +21,13 @@ public:
         return what_err.c_str();
     }
 private:
-    const std::string& what_err;
+    std::string what_err;
 };
 
 class Unmatched_parentheses : std::exception
 {
 public:
-    Unmatched_parentheses(const std::string& s = "")
+    Unmatched_parentheses(std::string s = "")
         : what_err{s}
     {
     }
@@ -37,13 +37,13 @@ public:
         return what_err.c_str();
     }
 private:
-    const std::string& what_err;
+    std::string what_err;
 };
 
 class Syntax_error : std::exception
 {
 public:
-    Syntax_error(const std::string& s = "")
+    Syntax_error(std::string s = "")
         : what_err{s}
     {
     }
@@ -53,7 +53,7 @@ public:
         return what_err.c_str();
     }
 private:
-    const std::string& what_err;
+    std::string what_err;
 };
 
 #endif

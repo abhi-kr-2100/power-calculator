@@ -11,7 +11,7 @@
 class Unknown_token : std::exception
 {
 public:
-    Unknown_token(const std::string& s = "")
+    Unknown_token(const std::string s = "")
         : what_err{s}
     {
     }
@@ -21,7 +21,7 @@ public:
         return what_err.c_str();
     }
 private:
-    const std::string& what_err;
+    std::string what_err;
 };
 
 #endif
