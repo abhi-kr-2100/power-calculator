@@ -26,10 +26,15 @@ pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
 
         if (!nesting)
         {
-            auto pos = find(to_find.begin(), to_find.end(), e->op);
-            if (pos != to_find.end())
+            // avoid cases where op is the starting character or follows an
+            // operator
+            if (e != s && (e - 1)->kind != Token_type::operator_type)
             {
-                return {e, *pos};
+                auto pos = find(to_find.begin(), to_find.end(), e->op);
+                if (pos != to_find.end())
+                {
+                    return {e, *pos};
+                }
             }
         }
     }
