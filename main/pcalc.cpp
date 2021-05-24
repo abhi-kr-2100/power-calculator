@@ -6,6 +6,8 @@
 #include <string>
 #include <cstdlib>
 #include "parser/parser.hpp"
+#include "parser/exceptions.hpp"
+#include "token/exceptions.hpp"
 
 using std::cout;
 using std::cin;
@@ -33,7 +35,27 @@ void calculate(Parser& calc)
         exit(EXIT_FAILURE);
     }
     
-    cout << answer << calc.evaluate(expr) << "\n";
+    try
+    {
+        double result = calc.evaluate(expr);
+        cout << answer << result << "\n";
+    }
+    catch (Unknown_token&)
+    {
+        cout << error << "Unknown token in input.\n";
+    }
+    catch (Divide_by_zero&)
+    {
+        cout << error << "Divide by zero is not allowed.\n";
+    }
+    catch (Unmatched_parentheses&)
+    {
+        cout << error << "Unmatched parentheses.\n";
+    }
+    catch (Syntax_error&)
+    {
+        cout << error << "Syntax error.\n";
+    }
 }
 
 int main()

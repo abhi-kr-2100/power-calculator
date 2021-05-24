@@ -1,5 +1,5 @@
 cc_binary(
     name = "pcalc",
     srcs = ["pcalc.cpp"],
-    deps = ["//parser:parser"],
+    deps = ["//parser:parser", "//token:token"],
 )
