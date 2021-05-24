@@ -101,7 +101,7 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
     case '(':
         if ((e - 1)->op != ')')
         {
-            throw Unmatched_parentheses{};
+            throw Unmatched_parentheses{"Missing ')'"};
         }
         return expression(s + 1, e - 1);
     case '+':
