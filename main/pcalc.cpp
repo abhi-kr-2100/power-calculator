@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+#include "parser/parser.hpp"
 
 using std::cout;
 using std::cin;
@@ -16,6 +17,7 @@ int main()
     constexpr auto error = "! ";
 
     cout << "Welcome to Power Calculator!\n";
+    Parser calc;
 
     while (true)
     {
@@ -34,6 +36,6 @@ int main()
             break;
         }
         
-        cout << answer << expr << "\n";
+        cout << answer << calc.evaluate(expr) << "\n";
     }
 }
