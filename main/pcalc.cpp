@@ -41,21 +41,21 @@ void calculate(Parser& calc)
         double result = calc.evaluate(expr);
         cout << answer << result << "\n";
     }
-    catch (Unknown_token&)
+    catch (Unknown_token& err)
     {
-        cout << error << "Unknown token in input.\n";
+        cout << error << err.what() << "\n";
     }
-    catch (Divide_by_zero&)
+    catch (Divide_by_zero& err)
     {
-        cout << error << "Divide by zero is not allowed.\n";
+        cout << error << err.what() << "\n";
     }
-    catch (Unmatched_parentheses&)
+    catch (Unmatched_parentheses& err)
     {
-        cout << error << "Unmatched parentheses.\n";
+        cout << error << err.what() << "\n";
     }
-    catch (Syntax_error&)
+    catch (Syntax_error& err)
     {
-        cout << error << "Syntax error.\n";
+        cout << error << err.what() << "\n";
     }
 }
 
