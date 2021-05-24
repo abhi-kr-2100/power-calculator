@@ -11,6 +11,7 @@
 
 using std::cout;
 using std::cin;
+using std::getline;
 using std::string;
 using std::exit;
 
@@ -22,7 +23,7 @@ void calculate(Parser& calc)
 
     cout << prompt;
     string expr;
-    cin >> expr;
+    getline(cin, expr);
 
     if (cin.eof())
     {
