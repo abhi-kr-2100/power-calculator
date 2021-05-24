@@ -4,15 +4,6 @@
 
 using std::istringstream;
 
-Token Token_stream::get()
-{
-    return Token{};
-}
-
-void Token_stream::putback(Token t)
-{
-}
-
 std::vector<Token> tokenize(const std::string& expr)
 {
     istringstream ss{expr};

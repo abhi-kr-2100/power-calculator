@@ -5,7 +5,6 @@
  * This library provides:
  * - Token UDT to represent a calculator token
  * - Token_type UDT to differentiate between different types of Token
- * - Token_stream UDT to enable tokenized input
  * - The tokenize() function to get a vector of tokens from a string
 */
 
@@ -23,23 +22,6 @@ struct Token
     Token_type kind {};
     char op {};    // in case the token is an operator
     double val {}; // in case the token is a number
-};
-
-class Token_stream
-{
-private:
-    std::istream& reader;
-    Token buffer;
-    bool full;  // is the buffer full?
-
-public:
-    Token_stream(std::istream& in)
-        : reader{in}
-    {
-    }
-
-    Token get();
-    void putback(Token t);
 };
 
 std::vector<Token> tokenize(const std::string& expr);
