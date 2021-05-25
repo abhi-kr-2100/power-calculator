@@ -3,3 +3,4 @@ bazel-out
 bazel-testlogs
 bazel-power-calculator
 .vscode/settings.json
+.vscode/c_cpp_properties.json
