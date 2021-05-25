@@ -133,6 +133,7 @@ TEST(ParserTermTest, BadTerms)
     EXPECT_ANY_THROW(calc.evaluate("2**2"));
     EXPECT_ANY_THROW(calc.evaluate("*2*4"));
     EXPECT_ANY_THROW(calc.evaluate("/2*3"));
+    EXPECT_ANY_THROW(calc.evaluate("3)/2"));
 }
 
 TEST(ParserExpressionTest, CorrectExpressions)
