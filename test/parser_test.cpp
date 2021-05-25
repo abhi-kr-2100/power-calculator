@@ -134,3 +134,28 @@ TEST(ParserTermTest, BadTerms)
     EXPECT_ANY_THROW(calc.evaluate("*2*4"));
     EXPECT_ANY_THROW(calc.evaluate("/2*3"));
 }
+
+TEST(ParserExpressionTest, CorrectExpressions)
+{
+    Parser calc;
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("5+3.2"), 8.2);
+    EXPECT_DOUBLE_EQ(calc.evaluate("5-3.2"), 1.8);
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("5-3.2/2"), 3.4);
+    EXPECT_DOUBLE_EQ(calc.evaluate("5-3*2"), -1);
+    
+    // EXPECT_DOUBLE_EQ(calc.evaluate("5--3.2"), 8.2);
+    // EXPECT_DOUBLE_EQ(calc.evaluate("5---3.2"), 1.8);
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("(5-3)*2"), 4);
+    EXPECT_DOUBLE_EQ(calc.evaluate("(5-3)/2"), 1);
+}
+
+TEST(ParserExpressionTest, BadExpressions)
+{
+    Parser calc;
+
+    EXPECT_ANY_THROW(calc.evaluate("(5-3*2"));
+    EXPECT_ANY_THROW(calc.evaluate("(5-3).2"));
+}
