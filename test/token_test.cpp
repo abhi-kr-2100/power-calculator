@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "token/token.hpp"
+#include "token/exceptions.hpp"
 
 TEST(TokenizeTest, Operators)
 {
@@ -80,4 +81,21 @@ TEST(TokenizeTest, Numbers)
     EXPECT_EQ(EXP_minus.size(), 1);
     EXPECT_EQ(EXP_minus[0].kind, Token_type::number);
     EXPECT_EQ(EXP_minus[0].val, 1E-5);
+}
+
+TEST(TokenizeTest, UnknownOperator)
+{
+    EXPECT_THROW(tokenize("$"), Unknown_token);
+}
+
+TEST(Tokenize, BadNumber)
+{
+    EXPECT_THROW(tokenize("12$"), Unknown_token);
+    EXPECT_ANY_THROW(tokenize("4.2.3"));
+    EXPECT_ANY_THROW(tokenize("1e5.2"));
+    EXPECT_ANY_THROW(tokenize("1E5.2"));
+    EXPECT_ANY_THROW(tokenize("1e+5.2"));
+    EXPECT_ANY_THROW(tokenize("1e-5.2"));
+    EXPECT_ANY_THROW(tokenize("1E+5.2"));
+    EXPECT_ANY_THROW(tokenize("1E-5.2"));
 }
