@@ -83,3 +83,54 @@ TEST(ParserPrimaryTest, BadPrimary)
     EXPECT_ANY_THROW(calc.evaluate("1E+5.2"));
     EXPECT_ANY_THROW(calc.evaluate("1E-5.2"));
 }
+
+TEST(ParserTermTest, CorrectTerms)
+{
+    Parser calc;
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("7*6"), 42);
+    EXPECT_DOUBLE_EQ(calc.evaluate("7/6"), 7./6);
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("0.7*0.6"), 0.42);
+    EXPECT_DOUBLE_EQ(calc.evaluate("0.7/0.6"), 0.7/0.6);
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("1*3*2*7*1"), 42);
+    EXPECT_DOUBLE_EQ(calc.evaluate("1*.3*2*.7*1"), 0.42);
+    
+    EXPECT_DOUBLE_EQ(calc.evaluate("1/2/3"), 1./2./3.);
+    EXPECT_DOUBLE_EQ(calc.evaluate("1./2./3.0"), 1./2./3.);
+    
+    EXPECT_DOUBLE_EQ(calc.evaluate("5*3/3"), 5);
+    EXPECT_DOUBLE_EQ(calc.evaluate("5*3/2"), 1.5*5);
+    
+    EXPECT_DOUBLE_EQ(calc.evaluate("3*0"), 0);
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("-7*3"), -21);
+    EXPECT_DOUBLE_EQ(calc.evaluate("-7*-3"), 21);
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("-10/2"), -5);
+    EXPECT_DOUBLE_EQ(calc.evaluate("10/-2"), -5);
+    EXPECT_DOUBLE_EQ(calc.evaluate("-10/-2"), 5);
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("--10/-2"), -5);
+    EXPECT_DOUBLE_EQ(calc.evaluate("--10/--2"), 5);
+}
+
+TEST(ParserTermTest, DivisionByZero)
+{
+    Parser calc;
+
+    EXPECT_THROW(calc.evaluate("42/0"), Divide_by_zero);
+    EXPECT_THROW(calc.evaluate("42/-0"), Divide_by_zero);
+    EXPECT_THROW(calc.evaluate("42/+0"), Divide_by_zero);
+}
+
+TEST(ParserTermTest, BadTerms)
+{
+    Parser calc;
+
+    EXPECT_ANY_THROW(calc.evaluate("42//2"));
+    EXPECT_ANY_THROW(calc.evaluate("2**2"));
+    EXPECT_ANY_THROW(calc.evaluate("*2*4"));
+    EXPECT_ANY_THROW(calc.evaluate("/2*3"));
+}
