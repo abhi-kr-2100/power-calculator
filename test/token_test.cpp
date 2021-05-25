@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "token/token.hpp"
 
-TEST(TokenizeTest, TestOperators)
+TEST(TokenizeTest, Operators)
 {
     auto plus = tokenize("+");
     EXPECT_EQ(plus.size(), 1);
