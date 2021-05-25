@@ -9,11 +9,21 @@ using std::find;
 using ull = unsigned long long;
 
 enum class Check_nesting { yes, no };
-enum class Allow_prev_op { yes, no };
 
+/**
+ * Find between s and e (exclusive), from the right side, the characters given.
+ * Also, follow the following conditions:
+ * - Ignore if the characters occur inside parentheses (default)
+ * - Ignore if any operator occurs before the characters (default)
+ *  - OR only ignore if the preceding operator matches a given list
+ * 
+ * chk_nesting determines if characters occuring inside parentheses are ignored.
+ * prev_op_ignore contains the list of operators that should be ignored even
+ * if they occur before a searching-for character.
+*/
 pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
     std::vector<char> to_find, Check_nesting chk_nesting = Check_nesting::yes,
-    Allow_prev_op prev_op = Allow_prev_op::no)
+    std::vector<char> prev_op_ignore = {'(', ')'})
 {
     ull nesting = 0;    // the level of nesting
     for (--e; e != s; --e)
@@ -33,21 +43,18 @@ pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
 
         if (!nesting && e != s)
         {
-            auto prev = e - 1;
-            // found symbol will only be considered, if this is set to true
+            // does no operator occur before the found character
+            // found character is only considered valid if this is true
             bool prev_op_test = false;
 
-            // avoid cases where op is the starting character or follows an
-            // operator
-            if (prev_op == Allow_prev_op::no)
-            {
-                if (prev->kind != Token_type::operator_type ||
-                    (prev->op == ')' || prev->op == '('))
-                {
-                    prev_op_test = true;
-                }
-            }
-            else
+            auto prev_op = (e - 1);
+            // can the previous op be ignored?
+            bool ignoreable = \
+                find(
+                    prev_op_ignore.begin(), prev_op_ignore.end(), prev_op->op
+                ) != prev_op_ignore.end();
+
+            if (prev_op->kind != Token_type::operator_type || ignoreable)
             {
                 prev_op_test = true;
             }
@@ -125,7 +132,7 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
     case '(':
     {
         auto r = reverse_search(
-            s, e, {')'}, Check_nesting::no, Allow_prev_op::yes);
+            s, e, {')'}, Check_nesting::no);
         if (r.first == s)
         {
             throw Unmatched_parentheses{"Missing ')'"};
