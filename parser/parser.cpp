@@ -124,6 +124,12 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
 {
     if (s->kind == Token_type::number)
     {
+        // more than just a number: "54)"
+        if (s + 1 != e)
+        {
+            throw Unmatched_parentheses{"Missing '('"};
+        }
+        
         return s->val;
     }
 
