@@ -8,27 +8,51 @@ using std::find;
 
 using ull = unsigned long long;
 
+enum class Check_nesting { yes, no };
+enum class Allow_prev_op { yes, no };
+
 pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
-    std::vector<char> to_find)
+    std::vector<char> to_find, Check_nesting chk_nesting = Check_nesting::yes,
+    Allow_prev_op prev_op = Allow_prev_op::no)
 {
     ull nesting = 0;    // the level of nesting
     for (--e; e != s; --e)
     {
-        switch (e->op)
+        if (chk_nesting == Check_nesting::yes)
         {
-        case ')':
-            ++nesting;
-            break;
-        case '(':
-            --nesting;
-            break;
+            switch (e->op)
+            {
+            case ')':
+                ++nesting;
+                break;
+            case '(':
+                --nesting;
+                break;
+            }
         }
 
-        if (!nesting)
+        if (!nesting && e != s)
         {
+            auto prev = e - 1;
+            // found symbol will only be considered, if this is set to true
+            bool prev_op_test = false;
+
             // avoid cases where op is the starting character or follows an
             // operator
-            if (e != s && (e - 1)->kind != Token_type::operator_type)
+            if (prev_op == Allow_prev_op::no)
+            {
+                if (prev->kind != Token_type::operator_type ||
+                    (prev->op == ')' || prev->op == '('))
+                {
+                    prev_op_test = true;
+                }
+            }
+            else
+            {
+                prev_op_test = true;
+            }
+
+            if (prev_op_test)
             {
                 auto pos = find(to_find.begin(), to_find.end(), e->op);
                 if (pos != to_find.end())
@@ -99,11 +123,15 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
     switch (s->op)
     {
     case '(':
-        if ((e - 1)->op != ')')
+    {
+        auto r = reverse_search(
+            s, e, {')'}, Check_nesting::no, Allow_prev_op::yes);
+        if (r.first == s)
         {
             throw Unmatched_parentheses{"Missing ')'"};
         }
-        return expression(s + 1, e - 1);
+        return expression(s + 1, r.first);
+    }
     case '+':
         return primary(s + 1, e);
     case '-':
