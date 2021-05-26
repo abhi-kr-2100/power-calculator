@@ -39,7 +39,7 @@ pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
     {
         return {s, 0};
     }
-    
+
     ull nesting = 0;    // the level of nesting
     for (--e; e != s; --e)
     {
@@ -84,7 +84,7 @@ double Parser::evaluate(const std::string& expr)
 
 double Parser::expression(const Token_iter& s, const Token_iter& e)
 {
-    auto i = reverse_search(s, e - 1, {'+', '-'});
+    auto i = reverse_search(s, e, {'+', '-'});
     if (i.first != s)
     {
         switch (i.second)
@@ -101,7 +101,7 @@ double Parser::expression(const Token_iter& s, const Token_iter& e)
 
 double Parser::term(const Token_iter& s, const Token_iter& e)
 {
-    auto i = reverse_search(s, e - 1, {'*', '/'});
+    auto i = reverse_search(s, e, {'*', '/'});
     if (i.first != s)
     {
         switch (i.second)
