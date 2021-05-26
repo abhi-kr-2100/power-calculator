@@ -8,6 +8,11 @@ using std::find;
 
 using ull = unsigned long long;
 
+bool is_paren(Token t)
+{
+    return t.kind == Token_type::operator_type && (t.op == '(' || t.op == ')');
+}
+
 enum class Check_nesting { yes, no };
 
 /**
@@ -124,11 +129,13 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
 {
     if (s->kind == Token_type::number)
     {
+        auto nxt = s + 1;
+
         // more than just a number: "54)", or two consecutive numbers
-        if (s + 1 != e)
+        if (nxt != e)
         {
-            // two consecutive numbers
-            if ((s + 1)->kind == Token_type::number)
+            // two consecutive numbers: "5.2 4.8" or 23(23)
+            if (nxt->kind == Token_type::number || is_paren(*nxt))
             {
                 throw Syntax_error{"Missing operator between operands."};
             }
