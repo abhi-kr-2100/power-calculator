@@ -48,10 +48,6 @@ pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
 
         if (!nesting && e != s)
         {
-            // does no operator occur before the found character
-            // found character is only considered valid if this is true
-            bool prev_op_test = false;
-
             auto prev_op = (e - 1);
             // can the previous op be ignored?
             bool ignoreable = \
@@ -60,11 +56,6 @@ pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
                 ) != prev_op_ignore.end();
 
             if (prev_op->kind != Token_type::operator_type || ignoreable)
-            {
-                prev_op_test = true;
-            }
-
-            if (prev_op_test)
             {
                 auto pos = find(to_find.begin(), to_find.end(), e->op);
                 if (pos != to_find.end())
