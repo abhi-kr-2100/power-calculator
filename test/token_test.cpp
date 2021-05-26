@@ -55,32 +55,32 @@ TEST(TokenizeTest, Numbers)
     auto exp = tokenize("1e5");
     EXPECT_EQ(exp.size(), 1);
     EXPECT_EQ(exp[0].kind, Token_type::number);
-    EXPECT_EQ(exp[0].val, 1e5);
+    EXPECT_DOUBLE_EQ(exp[0].val, 1e5);
 
     auto EXP = tokenize("1E5");
     EXPECT_EQ(EXP.size(), 1);
     EXPECT_EQ(EXP[0].kind, Token_type::number);
-    EXPECT_EQ(EXP[0].val, 1E5);
+    EXPECT_DOUBLE_EQ(EXP[0].val, 1E5);
     
     auto exp_plus = tokenize("1e+5");
     EXPECT_EQ(exp_plus.size(), 1);
     EXPECT_EQ(exp_plus[0].kind, Token_type::number);
-    EXPECT_EQ(exp_plus[0].val, 1e+5);
+    EXPECT_DOUBLE_EQ(exp_plus[0].val, 1e+5);
 
     auto exp_minus = tokenize("1e-5");
     EXPECT_EQ(exp_minus.size(), 1);
     EXPECT_EQ(exp_minus[0].kind, Token_type::number);
-    EXPECT_EQ(exp_minus[0].val, 1e-5);
+    EXPECT_DOUBLE_EQ(exp_minus[0].val, 1e-5);
     
     auto EXP_plus = tokenize("1E+5");
     EXPECT_EQ(EXP_plus.size(), 1);
     EXPECT_EQ(EXP_plus[0].kind, Token_type::number);
-    EXPECT_EQ(EXP_plus[0].val, 1E+5);
+    EXPECT_DOUBLE_EQ(EXP_plus[0].val, 1E+5);
 
     auto EXP_minus = tokenize("1E-5");
     EXPECT_EQ(EXP_minus.size(), 1);
     EXPECT_EQ(EXP_minus[0].kind, Token_type::number);
-    EXPECT_EQ(EXP_minus[0].val, 1E-5);
+    EXPECT_DOUBLE_EQ(EXP_minus[0].val, 1E-5);
 }
 
 TEST(TokenizeTest, UnknownOperator)
