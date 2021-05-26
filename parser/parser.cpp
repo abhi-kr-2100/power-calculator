@@ -8,11 +8,6 @@ using std::find;
 
 using ull = unsigned long long;
 
-bool is_paren(Token t)
-{
-    return t.kind == Token_type::operator_type && (t.op == '(' || t.op == ')');
-}
-
 enum class Check_nesting { yes, no };
 
 /**
