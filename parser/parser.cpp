@@ -8,6 +8,12 @@ using std::find;
 
 using ull = unsigned long long;
 
+template <class T>
+bool contains(const std::vector<T>& v, const T& e)
+{
+    return find(v.begin(), v.end(), e) != v.end();
+}
+
 enum class Check_nesting { yes, no };
 
 /**
@@ -20,6 +26,10 @@ enum class Check_nesting { yes, no };
  * chk_nesting determines if characters occuring inside parentheses are ignored.
  * prev_op_ignore contains the list of operators that should be ignored even
  * if they occur before a searching-for character.
+ * 
+ * Return a pair in which the first element is an iterator that points to where
+ * between s and e, the character was found. The second element is the found
+ * character itself.
 */
 pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
     std::vector<char> to_find, Check_nesting chk_nesting = Check_nesting::yes,
@@ -41,14 +51,11 @@ pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
             }
         }
 
-        if (!nesting && e != s)
+        if (!nesting)
         {
             auto prev_op = (e - 1);
             // can the previous op be ignored?
-            bool ignoreable = \
-                find(
-                    prev_op_ignore.begin(), prev_op_ignore.end(), prev_op->op
-                ) != prev_op_ignore.end();
+            bool ignoreable = contains(prev_op_ignore, prev_op->op);
 
             if (prev_op->kind != Token_type::operator_type || ignoreable)
             {
