@@ -35,6 +35,11 @@ pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
     std::vector<char> to_find, Check_nesting chk_nesting = Check_nesting::yes,
     std::vector<char> prev_op_ignore = {'(', ')'})
 {
+    if (e == s)
+    {
+        return {s, 0};
+    }
+    
     ull nesting = 0;    // the level of nesting
     for (--e; e != s; --e)
     {
