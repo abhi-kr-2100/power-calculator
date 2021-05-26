@@ -172,4 +172,10 @@ TEST(ParserExpressionTest, BadExpressions)
 
     EXPECT_ANY_THROW(calc.evaluate("(5-3*2"));
     EXPECT_ANY_THROW(calc.evaluate("(5-3).2"));
+    EXPECT_ANY_THROW(calc.evaluate("4+"));
+    EXPECT_ANY_THROW(calc.evaluate("4-"));
+    EXPECT_ANY_THROW(calc.evaluate("4*"));
+    EXPECT_ANY_THROW(calc.evaluate("4/"));
+    EXPECT_ANY_THROW(calc.evaluate("4("));
+    EXPECT_ANY_THROW(calc.evaluate("4)"));
 }
