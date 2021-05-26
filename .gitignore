@@ -4,3 +4,7 @@ bazel-testlogs
 bazel-power-calculator
 .vscode/settings.json
 .vscode/c_cpp_properties.json
+test/autogen-tests/autogentest.tc
+test/autogen-tests/pcalc.expect
+test/autogen-tests/pcalc.out
+test/autogen-tests/__pycache__/autogen_helpers.cpython-39.pyc
