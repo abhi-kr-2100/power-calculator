@@ -143,10 +143,18 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
     {
         auto r = reverse_search(
             s, e, {')'}, Check_nesting::no);
+        
         if (r.first == s)
         {
             throw Unmatched_parentheses{"Missing ')'"};
         }
+
+        // check for empty parens: ()
+        if (r.first == (s + 1))
+        {
+            throw Syntax_error{"Nothing inside parentheses!"};
+        }
+        
         return expression(s + 1, r.first);
     }
     case '+':
