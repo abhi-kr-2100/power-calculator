@@ -84,7 +84,7 @@ TEST(ParserPrimaryTest, BadPrimary)
     EXPECT_ANY_THROW(calc.evaluate("1E-5.2"));
 }
 
-TEST(ParserPrimaryTest, UnbalancedParens)
+TEST(ParserPrimaryTest, BadParens)
 {
     Parser calc;
 
@@ -92,6 +92,8 @@ TEST(ParserPrimaryTest, UnbalancedParens)
     EXPECT_THROW(calc.evaluate("(5)+(5"), Unmatched_parentheses);
     EXPECT_THROW(calc.evaluate("5)"), Unmatched_parentheses);
     EXPECT_THROW(calc.evaluate("(5)+5)"), Unmatched_parentheses);
+    EXPECT_THROW(calc.evaluate("()"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5("), Syntax_error);
 }
 
 TEST(ParserTermTest, CorrectTerms)
