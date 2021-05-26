@@ -126,7 +126,7 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
         if (nxt != e)
         {
             // two consecutive numbers: "5.2 4.8" or 23(23)
-            if (nxt->kind == Token_type::number || is_paren(*nxt))
+            if (nxt->kind == Token_type::number || nxt->op == '(')
             {
                 throw Syntax_error{"Missing operator between operands."};
             }
