@@ -18,6 +18,8 @@ enum class Check_nesting { yes, no };
 
 /**
  * Find between s and e (exclusive), from the right side, the characters given.
+ * If not found, return {s, 0}.
+ * 
  * Also, follow the following conditions:
  * - Ignore if the characters occur inside parentheses (default)
  * - Ignore if any operator occurs before the characters (default)
@@ -35,6 +37,7 @@ pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
     std::vector<char> to_find, Check_nesting chk_nesting = Check_nesting::yes,
     std::vector<char> prev_op_ignore = {'(', ')'})
 {
+    // nothing to search
     if (e == s)
     {
         return {s, 0};
@@ -58,11 +61,10 @@ pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
 
         if (!nesting)
         {
-            auto prev_op = (e - 1);
-            // can the previous op be ignored?
-            bool ignoreable = contains(prev_op_ignore, prev_op->op);
+            auto prev_tok = (e - 1);
+            bool ignoreable = contains(prev_op_ignore, prev_tok->op);
 
-            if (prev_op->kind != Token_type::operator_type || ignoreable)
+            if (prev_tok->kind != Token_type::operator_type || ignoreable)
             {
                 auto pos = find(to_find.begin(), to_find.end(), e->op);
                 if (pos != to_find.end())
@@ -127,8 +129,6 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
 {
     if (s->kind == Token_type::number)
     {
-        // auto nxt = s + 1;
-
         // more than just a number
         if ((s + 1) != e)
         {
