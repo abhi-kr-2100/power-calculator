@@ -89,7 +89,7 @@ TEST(ParserPrimaryTest, BadParens)
     Parser calc;
 
     EXPECT_THROW(calc.evaluate("(5"), Unmatched_parentheses);
-    EXPECT_THROW(calc.evaluate("(5)+(5"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("(5)+(5"), Unmatched_parentheses);
     EXPECT_THROW(calc.evaluate("5)"), Unmatched_parentheses);
     EXPECT_THROW(calc.evaluate("(5)+5)"), Unmatched_parentheses);
     EXPECT_THROW(calc.evaluate("()"), Syntax_error);
