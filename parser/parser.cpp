@@ -120,18 +120,12 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
 {
     if (s->kind == Token_type::number)
     {
-        auto nxt = s + 1;
+        // auto nxt = s + 1;
 
-        // more than just a number: "54)", or two consecutive numbers
-        if (nxt != e)
+        // more than just a number
+        if ((s + 1) != e)
         {
-            // two consecutive numbers: "5.2 4.8" or 23(23)
-            if (nxt->kind == Token_type::number || nxt->op == '(')
-            {
-                throw Syntax_error{"Missing operator between operands."};
-            }
-
-            throw Unmatched_parentheses{"Missing '('"};
+            throw Syntax_error{"Only a number was expected."};
         }
         
         return s->val;
@@ -141,27 +135,12 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
     {
     case '(':
     {
-        auto r = reverse_search(
-            s, e, {')'}, Check_nesting::no);
-        
-        if (r.first == s)
+        if ((e - 1)->op != ')')
         {
-            throw Unmatched_parentheses{"Missing ')'"};
+            throw Unmatched_parentheses{"Missing ')'."};
         }
 
-        // check for empty parens: ()
-        if (r.first == (s + 1))
-        {
-            throw Syntax_error{"Nothing inside parentheses!"};
-        }
-
-        // check extra numbers: (5)2
-        if (r.first != (e - 1))
-        {
-            throw Syntax_error{"No operator between operands."};
-        }
-
-        return expression(s + 1, r.first);
+        return expression(s + 1, e - 1);
     }
     case '+':
         return primary(s + 1, e);
