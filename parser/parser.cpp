@@ -144,7 +144,7 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
     {
         if ((e - 1)->op != ')')
         {
-            throw Unmatched_parentheses{"Missing ')'."};
+            throw Syntax_error{"Missing ')'."};
         }
 
         return expression(s + 1, e - 1);

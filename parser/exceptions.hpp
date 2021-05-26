@@ -24,22 +24,6 @@ private:
     std::string what_err;
 };
 
-class Unmatched_parentheses : std::exception
-{
-public:
-    Unmatched_parentheses(std::string s = "")
-        : what_err{s}
-    {
-    }
-
-    const char* what() const noexcept
-    {
-        return what_err.c_str();
-    }
-private:
-    std::string what_err;
-};
-
 class Syntax_error : std::exception
 {
 public:

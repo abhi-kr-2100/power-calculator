@@ -49,10 +49,6 @@ void calculate(Parser& calc)
     {
         cout << error << err.what() << "\n";
     }
-    catch (Unmatched_parentheses& err)
-    {
-        cout << error << err.what() << "\n";
-    }
     catch (Syntax_error& err)
     {
         cout << error << err.what() << "\n";
