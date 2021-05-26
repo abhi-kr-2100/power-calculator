@@ -154,7 +154,13 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
         {
             throw Syntax_error{"Nothing inside parentheses!"};
         }
-        
+
+        // check extra numbers: (5)2
+        if (r.first != (e - 1))
+        {
+            throw Syntax_error{"No operator between operands."};
+        }
+
         return expression(s + 1, r.first);
     }
     case '+':
