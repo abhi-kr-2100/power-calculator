@@ -75,13 +75,13 @@ TEST(ParserPrimaryTest, BadPrimary)
     Parser calc;
 
     EXPECT_THROW(calc.evaluate("12+"), Syntax_error);
-    EXPECT_ANY_THROW(calc.evaluate("4.2.3"));
-    EXPECT_ANY_THROW(calc.evaluate("1e5.2"));
-    EXPECT_ANY_THROW(calc.evaluate("1E5.2"));
-    EXPECT_ANY_THROW(calc.evaluate("1e+5.2"));
-    EXPECT_ANY_THROW(calc.evaluate("1e-5.2"));
-    EXPECT_ANY_THROW(calc.evaluate("1E+5.2"));
-    EXPECT_ANY_THROW(calc.evaluate("1E-5.2"));
+    EXPECT_THROW(calc.evaluate("4.2.3"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("1e5.2"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("1E5.2"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("1e+5.2"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("1e-5.2"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("1E+5.2"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("1E-5.2"), Syntax_error);
 }
 
 TEST(ParserPrimaryTest, BadParens)
@@ -142,11 +142,11 @@ TEST(ParserTermTest, BadTerms)
 {
     Parser calc;
 
-    EXPECT_ANY_THROW(calc.evaluate("42//2"));
-    EXPECT_ANY_THROW(calc.evaluate("2**2"));
-    EXPECT_ANY_THROW(calc.evaluate("*2*4"));
-    EXPECT_ANY_THROW(calc.evaluate("/2*3"));
-    EXPECT_ANY_THROW(calc.evaluate("3)/2"));
+    EXPECT_THROW(calc.evaluate("42//2"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("2**2"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("*2*4"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("/2*3"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("3)/2"), Syntax_error);
 }
 
 TEST(ParserExpressionTest, CorrectExpressions)
@@ -159,8 +159,8 @@ TEST(ParserExpressionTest, CorrectExpressions)
     EXPECT_DOUBLE_EQ(calc.evaluate("5-3.2/2"), 3.4);
     EXPECT_DOUBLE_EQ(calc.evaluate("5-3*2"), -1);
     
-    // EXPECT_DOUBLE_EQ(calc.evaluate("5--3.2"), 8.2);
-    // EXPECT_DOUBLE_EQ(calc.evaluate("5---3.2"), 1.8);
+    EXPECT_DOUBLE_EQ(calc.evaluate("5--3.2"), 8.2);
+    EXPECT_DOUBLE_EQ(calc.evaluate("5---3.2"), 1.8);
 
     EXPECT_DOUBLE_EQ(calc.evaluate("(5-3)*2"), 4);
     EXPECT_DOUBLE_EQ(calc.evaluate("(5-3)/2"), 1);
@@ -170,25 +170,25 @@ TEST(ParserExpressionTest, BadExpressions)
 {
     Parser calc;
 
-    EXPECT_ANY_THROW(calc.evaluate("(5-3*2"));
-    EXPECT_ANY_THROW(calc.evaluate("(5-3).2"));
-    EXPECT_ANY_THROW(calc.evaluate("4+"));
-    EXPECT_ANY_THROW(calc.evaluate("4-"));
-    EXPECT_ANY_THROW(calc.evaluate("4*"));
-    EXPECT_ANY_THROW(calc.evaluate("4/"));
-    EXPECT_ANY_THROW(calc.evaluate("4("));
-    EXPECT_ANY_THROW(calc.evaluate("4)"));
-    EXPECT_ANY_THROW(calc.evaluate("5**"));
-    EXPECT_ANY_THROW(calc.evaluate("5--"));
-    EXPECT_ANY_THROW(calc.evaluate("5++"));
-    EXPECT_ANY_THROW(calc.evaluate("5//"));
-    EXPECT_ANY_THROW(calc.evaluate("5))"));
-    EXPECT_ANY_THROW(calc.evaluate("5(("));
-    EXPECT_ANY_THROW(calc.evaluate("5***"));
-    EXPECT_ANY_THROW(calc.evaluate("5---"));
-    EXPECT_ANY_THROW(calc.evaluate("5+++"));
-    EXPECT_ANY_THROW(calc.evaluate("5///"));
-    EXPECT_ANY_THROW(calc.evaluate("5((()))"));
-    EXPECT_ANY_THROW(calc.evaluate("5)))"));
-    EXPECT_ANY_THROW(calc.evaluate("5((("));
+    EXPECT_THROW(calc.evaluate("(5-3*2"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("(5-3).2"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("4+"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("4-"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("4*"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("4/"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("4("), Syntax_error);
+    EXPECT_THROW(calc.evaluate("4)"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5**"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5--"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5++"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5//"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5))"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5(("), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5***"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5---"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5+++"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5///"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5((()))"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5)))"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5((("), Syntax_error);
 }
