@@ -124,9 +124,15 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
 {
     if (s->kind == Token_type::number)
     {
-        // more than just a number: "54)"
+        // more than just a number: "54)", or two consecutive numbers
         if (s + 1 != e)
         {
+            // two consecutive numbers
+            if ((s + 1)->kind == Token_type::number)
+            {
+                throw Syntax_error{"Missing operator between operands."};
+            }
+
             throw Unmatched_parentheses{"Missing '('"};
         }
         
