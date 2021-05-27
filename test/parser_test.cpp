@@ -133,9 +133,9 @@ TEST(ParserTermTest, DivisionByZero)
 {
     Parser calc;
 
-    EXPECT_THROW(calc.evaluate("42/0"), Divide_by_zero);
-    EXPECT_THROW(calc.evaluate("42/-0"), Divide_by_zero);
-    EXPECT_THROW(calc.evaluate("42/+0"), Divide_by_zero);
+    EXPECT_THROW(calc.evaluate("42/0"), Runtime_error);
+    EXPECT_THROW(calc.evaluate("42/-0"), Runtime_error);
+    EXPECT_THROW(calc.evaluate("42/+0"), Runtime_error);
 }
 
 TEST(ParserTermTest, BadTerms)

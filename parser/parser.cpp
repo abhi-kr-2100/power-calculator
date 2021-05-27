@@ -117,7 +117,7 @@ double Parser::term(const Token_iter& s, const Token_iter& e)
             auto divisor = primary(i.first + 1, e);
             if (divisor == 0)
             {
-                throw Divide_by_zero{"Division by 0."};
+                throw Runtime_error{"Division by 0."};
             }
             return term(s, i.first) / divisor;
         }

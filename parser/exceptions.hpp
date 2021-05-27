@@ -8,10 +8,10 @@
 #include <stdexcept>
 #include <string>
 
-class Divide_by_zero : std::exception
+class Runtime_error : std::exception
 {
 public:
-    Divide_by_zero(std::string s = "")
+    Runtime_error(std::string s = "")
         : what_err{s}
     {
     }

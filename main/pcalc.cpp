@@ -45,7 +45,7 @@ void calculate(Parser& calc)
     {
         cout << error << err.what() << "\n";
     }
-    catch (Divide_by_zero& err)
+    catch (Runtime_error& err)
     {
         cout << error << err.what() << "\n";
     }
