@@ -25,7 +25,7 @@ enum class Check_nesting { yes, no };
  * Also, follow the following conditions:
  * - Ignore if the characters occur inside parentheses (default)
  * - Ignore if any operator occurs before the characters (default)
- *  - OR only ignore if the preceding operator matches a given list
+ *  - AND always ignore if the preceding operator matches a given list
  * 
  * chk_nesting determines if characters occuring inside parentheses are ignored.
  * prev_op_ignore contains the list of operators that should be ignored even
