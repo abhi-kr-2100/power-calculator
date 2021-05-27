@@ -5,11 +5,13 @@
 
 using std::pair;
 using std::find;
+using std::vector;
+using std::string;
 
 using ull = unsigned long long;
 
 template <class T>
-bool contains(const std::vector<T>& v, const T& e)
+bool contains(const vector<T>& v, const T& e)
 {
     return find(v.begin(), v.end(), e) != v.end();
 }
@@ -34,8 +36,8 @@ enum class Check_nesting { yes, no };
  * character itself.
 */
 pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
-    std::vector<char> to_find, Check_nesting chk_nesting = Check_nesting::yes,
-    std::vector<char> prev_op_ignore = {'(', ')'})
+    vector<char> to_find, Check_nesting chk_nesting = Check_nesting::yes,
+    vector<char> prev_op_ignore = {'(', ')'})
 {
     // nothing to search
     if (e == s)
@@ -78,7 +80,7 @@ pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
     return {s, 0};
 }
 
-double Parser::evaluate(const std::string& expr)
+double Parser::evaluate(const string& expr)
 {
     auto tokens = tokenize(expr);
     return expression(tokens.begin(), tokens.end());
