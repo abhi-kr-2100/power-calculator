@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <stdexcept>
+
 #include "parser/parser.hpp"
 #include "parser/exceptions.hpp"
 #include "token/exceptions.hpp"
@@ -14,6 +16,8 @@ using std::cin;
 using std::getline;
 using std::string;
 using std::exit;
+using std::exception;
+using std::cerr;
 
 void calculate(Parser& calc)
 {
@@ -41,17 +45,9 @@ void calculate(Parser& calc)
         double result = calc.evaluate(expr);
         cout << answer << result << "\n";
     }
-    catch (Unknown_token& err)
+    catch (exception& ex)
     {
-        cout << error << err.what() << "\n";
-    }
-    catch (Runtime_error& err)
-    {
-        cout << error << err.what() << "\n";
-    }
-    catch (Syntax_error& err)
-    {
-        cout << error << err.what() << "\n";
+        cerr << error << ex.what() << "\n";
     }
 }
 
