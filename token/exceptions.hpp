@@ -24,4 +24,20 @@ private:
     std::string what_err;
 };
 
+class Bad_number : public std::exception
+{
+public:
+    Bad_number(const std::string s = "")
+        : what_err{s}
+    {
+    }
+
+    const char* what() const noexcept
+    {
+        return what_err.c_str();
+    }
+private:
+    std::string what_err;
+};
+
 #endif

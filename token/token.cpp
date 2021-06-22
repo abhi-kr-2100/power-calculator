@@ -37,6 +37,11 @@ std::vector<Token> tokenize(const std::string& expr)
             double v;
             ss >> v;
 
+            if (ss.fail())
+            {
+                throw Bad_number{"Not a valid number."};
+            }
+
             toks.push_back({.kind = Token_type::number, .val = v});
             break;
         }
