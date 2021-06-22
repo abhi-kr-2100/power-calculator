@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include <string>
 
-class Unknown_token : std::exception
+class Unknown_token : public std::exception
 {
 public:
     Unknown_token(const std::string s = "")

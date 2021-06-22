@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include <string>
 
-class Runtime_error : std::exception
+class Runtime_error : public std::exception
 {
 public:
     Runtime_error(std::string s = "")
@@ -24,7 +24,7 @@ private:
     std::string what_err;
 };
 
-class Syntax_error : std::exception
+class Syntax_error : public std::exception
 {
 public:
     Syntax_error(std::string s = "")
