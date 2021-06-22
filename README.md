@@ -7,7 +7,7 @@ quickly at a text terminal.
 
 ## Features
 
-Version 1.0.0 of `pcalc` supports the following features:
+Version 1.0.1 of `pcalc` supports the following features:
 
 * Basic four arithmetic operations
 * Parentheses to override order of operations
