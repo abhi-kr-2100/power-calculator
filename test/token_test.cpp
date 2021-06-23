@@ -83,6 +83,51 @@ TEST(TokenizeTest, Numbers)
     EXPECT_DOUBLE_EQ(EXP_minus[0].val, 1E-5);
 }
 
+TEST(TokenizeTest, Identifiers)
+{
+    auto identifier = tokenize("varName");
+    EXPECT_EQ(identifier.size(), 1);
+    EXPECT_EQ(identifier[0].kind, Token_type::identifier);
+    EXPECT_EQ(identifier[0].name, "varName");
+
+    auto var_decl = tokenize("let x = 42");
+    EXPECT_EQ(var_decl.size(), 4);
+    EXPECT_EQ(var_decl[0].kind, Token_type::identifier);
+    EXPECT_EQ(var_decl[0].name, "let");
+    EXPECT_EQ(var_decl[1].kind, Token_type::identifier);
+    EXPECT_EQ(var_decl[1].name, "x");
+    EXPECT_EQ(var_decl[2].kind, Token_type::operator_type);
+    EXPECT_EQ(var_decl[2].op, '=');
+    EXPECT_EQ(var_decl[3].kind, Token_type::number);
+    EXPECT_DOUBLE_EQ(var_decl[3].val, 42);
+
+    auto id_underscore = tokenize("_");
+    EXPECT_EQ(id_underscore.size(), 1);
+    EXPECT_EQ(id_underscore[0].kind, Token_type::identifier);
+    EXPECT_EQ(id_underscore[0].name, "_");
+
+    auto id_with_number = tokenize("_123 x123y");
+    EXPECT_EQ(id_with_number.size(), 2);
+    EXPECT_EQ(id_with_number[0].kind, Token_type::identifier);
+    EXPECT_EQ(id_with_number[0].name, "_123");
+    EXPECT_EQ(id_with_number[1].kind, Token_type::identifier);
+    EXPECT_EQ(id_with_number[1].name, "x123y");
+
+    auto id_and_number = tokenize("123_");
+    EXPECT_EQ(id_and_number.size(), 2);
+    EXPECT_EQ(id_and_number[0].kind, Token_type::number);
+    EXPECT_DOUBLE_EQ(id_and_number[0].val, 123);
+    EXPECT_EQ(id_and_number[1].kind, Token_type::identifier);
+    EXPECT_EQ(id_and_number[1].name, "_");
+
+    auto id_and_exp_num = tokenize("42e2xyz");
+    EXPECT_EQ(id_and_exp_num.size(), 2);
+    EXPECT_EQ(id_and_exp_num[0].kind, Token_type::number);
+    EXPECT_DOUBLE_EQ(id_and_exp_num[0].val, 42e2);
+    EXPECT_EQ(id_and_exp_num[1].kind, Token_type::identifier);
+    EXPECT_EQ(id_and_exp_num[1].name, "xyz");
+}
+
 TEST(TokenizeTest, UnknownOperator)
 {
     EXPECT_THROW(tokenize("$"), Unknown_token);
@@ -94,4 +139,10 @@ TEST(Tokenize, BadNumber)
     EXPECT_THROW(tokenize("42e"), Bad_number);
     EXPECT_THROW(tokenize(".e"), Bad_number);
     EXPECT_THROW(tokenize(".42e"), Bad_number);
+}
+
+TEST(TokenizeTest, BadVarNames)
+{
+    EXPECT_THROW(tokenize("$xyz"), Unknown_token);
+    EXPECT_THROW(tokenize("xyz$"), Unknown_token);
 }
