@@ -18,6 +18,13 @@ using Token_iter = std::vector<Token>::const_iterator;
  * 
  * It uses the following grammar:
  * 
+ * Statement:
+ *      VariableDeclaration
+ *      Expression
+ * VariableDeclaration:
+ *      "let" VariableName "=" Expression
+ * VariableName:
+ *      any valid C++ identifier
  * Expression:
  *      Expression + Term
  *      Expression - Term
@@ -29,6 +36,7 @@ using Token_iter = std::vector<Token>::const_iterator;
  * Primary
  *      ( Expression )
  *      Number
+ *      VariableName
  *      - Primary
  *      + Primary
 */
