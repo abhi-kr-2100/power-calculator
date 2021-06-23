@@ -14,14 +14,15 @@
 
 enum class Token_type
 {
-    operator_type, number
+    operator_type, number, identifier
 };
 
 struct Token
 {
     Token_type kind {};
-    char op {};    // in case the token is an operator
-    double val {}; // in case the token is a number
+    char op {};             // in case the token is an operator
+    double val {};          // in case the token is a number
+    std::string name {};    // in case the token is an identifier
 };
 
 std::vector<Token> tokenize(const std::string& expr);
