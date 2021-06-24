@@ -182,6 +182,10 @@ double Parser::variable_declaration(const Token_iter& s, const Token_iter& e)
     }
 
     auto var_name = var_name_iter->name;
+    if (variables_table.find(var_name) != variables_table.end())
+    {
+        throw Runtime_error{"Redeclaration of variable."};
+    }
 
     auto equal_sign_iter = s + 2;
     if (equal_sign_iter == e)
@@ -200,8 +204,8 @@ double Parser::variable_declaration(const Token_iter& s, const Token_iter& e)
     }
 
     auto val = expression(exp_iter, e);
+    variables_table[var_name] = val;
 
-    // TODO: actually define the variable
     return val;
 }
 
@@ -261,9 +265,13 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
 
         if (s->kind == Token_type::identifier)
         {
-            // TODO: check if the given variable is valid and defined
-            //       actually retrieve its value and return it
-            return 0;
+            auto var = variables_table.find(s->name);
+            if (var == variables_table.end())
+            {
+                throw Runtime_error{"Variable not found."};
+            }
+
+            return var->second;
         }
         
         return s->val;

@@ -8,6 +8,8 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
+
 #include "token/token.hpp"
 
 using Token_iter = std::vector<Token>::const_iterator;
@@ -47,6 +49,8 @@ public:
 private:
     // the keyword used to introduce a new variable
     const std::string var_declaration_key = "let";
+
+    std::unordered_map<std::string, double> variables_table;
     
     double variable_declaration(const Token_iter& s, const Token_iter& e);
     double expression(const Token_iter& s, const Token_iter& e);
