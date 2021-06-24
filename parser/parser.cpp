@@ -131,6 +131,11 @@ pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
 double Parser::evaluate(const string& expr)
 {
     auto tokens = tokenize(expr);
+    if (tokens.size() == 0)
+    {
+        throw Syntax_error{"Empty expression."};
+    }
+    
     return expression(tokens.begin(), tokens.end());
 }
 
