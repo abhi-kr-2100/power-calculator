@@ -31,6 +31,8 @@ using Token_iter = std::vector<Token>::const_iterator;
  *      Number
  *      - Primary
  *      + Primary
+ * Number
+ *      a valid C++ double literal
 */
 class Parser
 {
