@@ -170,6 +170,7 @@ TEST(ParserExpressionTest, BadExpressions)
 {
     Parser calc;
 
+    EXPECT_THROW(calc.evaluate(""), Syntax_error);
     EXPECT_THROW(calc.evaluate("(5-3*2"), Syntax_error);
     EXPECT_THROW(calc.evaluate("(5-3).2"), Syntax_error);
     EXPECT_THROW(calc.evaluate("4+"), Syntax_error);
