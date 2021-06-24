@@ -7,13 +7,14 @@ quickly at a text terminal.
 
 ## Features
 
-Version 1.0.2 of `pcalc` supports the following features:
+Version 1.1.0 of `pcalc` supports the following features:
 
 * Basic four arithmetic operations
 * Parentheses to override order of operations
+* Variable declarations
 
 Future releases will implement the following additional features:
 
-* Variables and constants
+* Predefined constants
 * Functions
 * Units and unit converters
