@@ -88,7 +88,7 @@ TEST(TokenizeTest, UnknownOperator)
     EXPECT_THROW(tokenize("$"), Unknown_token);
 }
 
-TEST(Tokenize, BadNumber)
+TEST(TokenizeTest, BadNumber)
 {
     EXPECT_THROW(tokenize("12$"), Unknown_token);
     EXPECT_THROW(tokenize("42e"), Bad_number);
