@@ -97,6 +97,27 @@ TEST(ParserPrimaryTest, BadParens)
     EXPECT_THROW(calc.evaluate("(5)(5)"), Syntax_error);
 }
 
+TEST(StatementTest, VariableDeclaration)
+{
+    Parser calc;
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("let pi = 3.14"), 3.14);
+    EXPECT_THROW(calc.evaluate("let let = 2"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("let"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("let x"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("let x ="), Syntax_error);
+    EXPECT_THROW(calc.evaluate("let x -= 5"), Syntax_error);
+}
+
+TEST(ParserPrimaryTest, VariableEvalutation)
+{
+    Parser calc;
+
+    calc.evaluate("let x = 4.2");
+    EXPECT_DOUBLE_EQ(calc.evaluate("x"), 4.2);
+    EXPECT_DOUBLE_EQ(calc.evaluate("(x)+(x+2.)"), 10.2);
+}
+
 TEST(ParserTermTest, CorrectTerms)
 {
     Parser calc;
