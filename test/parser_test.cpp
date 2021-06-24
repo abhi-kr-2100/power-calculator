@@ -117,7 +117,7 @@ TEST(ParserPrimaryTest, VariableEvalutation)
 
     calc.evaluate("let x = 4.2");
     EXPECT_DOUBLE_EQ(calc.evaluate("x"), 4.2);
-    EXPECT_DOUBLE_EQ(calc.evaluate("(x)+(x+2.)"), 10.2);
+    EXPECT_DOUBLE_EQ(calc.evaluate("(x)+(x+2.)"), 10.4);
 
     EXPECT_THROW(calc.evaluate("x + y"), Runtime_error);
 }
