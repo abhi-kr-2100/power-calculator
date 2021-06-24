@@ -45,6 +45,10 @@ class Parser
 public:
     double evaluate(const std::string& expr);
 private:
+    // the keyword used to introduce a new variable
+    const std::string var_declaration_key = "let";
+    
+    double variable_declaration(const Token_iter& s, const Token_iter& e);
     double expression(const Token_iter& s, const Token_iter& e);
     double term(const Token_iter& s, const Token_iter& e);
     double primary(const Token_iter& s, const Token_iter& e);
