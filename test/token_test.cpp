@@ -33,6 +33,11 @@ TEST(TokenizeTest, Operators)
     EXPECT_EQ(exp.size(), 1);
     EXPECT_EQ(exp[0].kind, Token_type::operator_type);
     EXPECT_EQ(exp[0].op, '^');
+
+    auto factorial = tokenize("!");
+    EXPECT_EQ(factorial.size(), 1);
+    EXPECT_EQ(factorial[0].kind, Token_type::operator_type);
+    EXPECT_EQ(factorial[0].op, '!');
     
     auto paren_open = tokenize("(");
     EXPECT_EQ(paren_open.size(), 1);

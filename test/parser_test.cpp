@@ -6,6 +6,7 @@
 
 using std::pow;
 using std::cbrt;
+using std::tgamma;
 
 TEST(ParserPrimaryTest, Numbers)
 {
@@ -151,6 +152,22 @@ TEST(ParserPrimaryTest, VariableEvalutation)
     EXPECT_DOUBLE_EQ(calc.evaluate("(x)+(x+2.)"), 10.4);
 
     EXPECT_THROW(calc.evaluate("x + y"), Runtime_error);
+}
+
+TEST(ParserPrimaryTest, FactorialTest)
+{
+    Parser calc;
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("20!"), tgamma(20+1));
+    EXPECT_DOUBLE_EQ(calc.evaluate("0!"), tgamma(0+1));
+    EXPECT_DOUBLE_EQ(calc.evaluate("12.567!"), tgamma(12.567+1));
+
+    // -a! means -(a!)
+    EXPECT_DOUBLE_EQ(calc.evaluate("-12!"), -tgamma(12 + 1));
+    EXPECT_DOUBLE_EQ(calc.evaluate("(-0)!"), tgamma(-0 + 1));
+
+    EXPECT_THROW(calc.evaluate("(-1)!"), Runtime_error);
+    EXPECT_THROW(calc.evaluate("(-42)!"), Runtime_error);
 }
 
 TEST(ParserTermTest, CorrectTerms)
