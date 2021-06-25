@@ -31,19 +31,30 @@ using Token_iter = std::vector<Token>::const_iterator;
  *      Expression + Term
  *      Expression - Term
  *      Term
- * Term
- *      Term % Primary
- *      Term * Primary
- *      Term / Primary
+ * Term:
+ *      Term % Exponent
+ *      Term * Exponent
+ *      Term / Exponent
+ *      Exponent
+ * Exponent: (see "Why is Exponent defined like this?" below.)
+ *      - Exponent
+ *      + Exponent
+ *      Primary ^ Exponent
  *      Primary
- * Primary
+ * Primary:
  *      ( Expression )
  *      Number
  *      VariableName
- *      - Primary
- *      + Primary
- * Number
+ * Number:
  *      a valid C++ double literal
+ * 
+ * -- Why is Exponent defined like this? --
+ * 
+ * Exponents in pcalc behave similarly to the exponents in Python, i.e.,
+ * -2 ^ 5 is -(2^5) [not (-2) ^ 5], hence, Exponent must handle the signs.
+ * 
+ * Additionally, the associativity of ^ is from left-to-right. That's why, it's
+ * Primary ^ Exponent instead of Exponent ^ Primary.
 */
 class Parser
 {
@@ -58,6 +69,7 @@ private:
     double variable_declaration(const Token_iter& s, const Token_iter& e);
     double expression(const Token_iter& s, const Token_iter& e);
     double term(const Token_iter& s, const Token_iter& e);
+    double exponent(const Token_iter& s, const Token_iter& e);
     double primary(const Token_iter& s, const Token_iter& e);
 };
 

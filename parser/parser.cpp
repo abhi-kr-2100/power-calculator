@@ -1,17 +1,30 @@
 #include <utility>
 #include <algorithm>
 #include <cmath>
+#include <limits>
+#include <iostream>
 
 #include "parser.hpp"
 #include "exceptions.hpp"
 
 using std::pair;
 using std::find;
+using std::find_if;
 using std::vector;
 using std::string;
 using std::fmod;
+using std::pow;
+using std::numeric_limits;
+using std::fabs;
+using std::cbrt;
 
 using ull = unsigned long long;
+using ll = long long;
+
+bool doubles_equal(double a, double b)
+{
+    return fabs(a - b) < numeric_limits<double>::epsilon();
+}
 
 template <class T>
 bool contains(const vector<T>& v, const T& e)
@@ -235,11 +248,11 @@ double Parser::term(const Token_iter& s, const Token_iter& e)
         switch (i.second)
         {
         case '*':
-            return term(s, i.first) * primary(i.first + 1, e);
+            return term(s, i.first) * exponent(i.first + 1, e);
         case '/':
         case '%':
         {
-            auto divisor = primary(i.first + 1, e);
+            auto divisor = exponent(i.first + 1, e);
             if (divisor == 0)
             {
                 throw Runtime_error{"Division or mod by 0."};
@@ -256,6 +269,54 @@ double Parser::term(const Token_iter& s, const Token_iter& e)
             }
         }
         }
+    }
+
+    return exponent(s, e);
+}
+
+double Parser::exponent(const Token_iter& s, const Token_iter& e)
+{
+    switch (s->op)
+    {
+    case '-':
+        return -exponent(s + 1, e);
+    case '+':
+        return +exponent(s + 1, e);
+    }
+
+    auto is_exp_operator = [](const Token& t) { return t.op == '^'; };
+    auto exp_pos = find_if(s, e, is_exp_operator);
+    if (exp_pos != e)
+    {
+        auto base = primary(s, exp_pos);
+        auto exp = exponent(exp_pos + 1, e);
+
+        /**
+         * Rules for exponentiation:
+         *  - base is -ve and exp is non-integer and exp != 1/3 -> error
+         *  - base is -ve and exp == 1/3 -> std::cbrt(base)
+         *  - base is 0 and exp is non-positive -> error
+         *  - otherwise -> pow(base, exp)
+        */
+        if (base < 0)
+        {
+            if (doubles_equal(exp, 1.0 / 3.0))
+            {
+                return cbrt(base);
+            }
+
+            if (!doubles_equal(ll(exp), exp))
+            {
+                throw Runtime_error{
+                    "Can't compute fractional exponent of negative base."};
+            }
+        }
+        if (base == 0 && exp <= 0)
+        {
+            throw Runtime_error{"Undefined exponent."};
+        }
+
+        return pow(base, exp);
     }
 
     return primary(s, e);
@@ -299,10 +360,10 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
 
         return expression(s + 1, e - 1);
     }
-    case '+':
-        return +primary(s + 1, e);
-    case '-':
-        return -primary(s + 1, e);
+    // case '+':
+    //     return +primary(s + 1, e);
+    // case '-':
+    //     return -primary(s + 1, e);
     }
 
     throw Syntax_error{"Primary expected."};
