@@ -32,6 +32,7 @@ using Token_iter = std::vector<Token>::const_iterator;
  *      Expression - Term
  *      Term
  * Term
+ *      Term % Primary
  *      Term * Primary
  *      Term / Primary
  *      Primary

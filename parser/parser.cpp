@@ -1,5 +1,6 @@
 #include <utility>
 #include <algorithm>
+#include <cmath>
 
 #include "parser.hpp"
 #include "exceptions.hpp"
@@ -8,6 +9,7 @@ using std::pair;
 using std::find;
 using std::vector;
 using std::string;
+using std::fmod;
 
 using ull = unsigned long long;
 
@@ -227,7 +229,7 @@ double Parser::expression(const Token_iter& s, const Token_iter& e)
 
 double Parser::term(const Token_iter& s, const Token_iter& e)
 {
-    auto i = reverse_search(s, e, {'*', '/'});
+    auto i = reverse_search(s, e, {'*', '/', '%'});
     if (i.first != s)
     {
         switch (i.second)
@@ -235,13 +237,23 @@ double Parser::term(const Token_iter& s, const Token_iter& e)
         case '*':
             return term(s, i.first) * primary(i.first + 1, e);
         case '/':
+        case '%':
         {
             auto divisor = primary(i.first + 1, e);
             if (divisor == 0)
             {
-                throw Runtime_error{"Division by 0."};
+                throw Runtime_error{"Division or mod by 0."};
             }
-            return term(s, i.first) / divisor;
+
+            auto t = term(s, i.first);
+            if (i.second == '/')
+            {
+                return t / divisor;
+            }
+            else
+            {
+                return fmod(t, divisor);
+            }
         }
         }
     }
