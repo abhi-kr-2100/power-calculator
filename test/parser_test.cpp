@@ -137,6 +137,8 @@ TEST(ExpTest, Exponents)
     EXPECT_DOUBLE_EQ(calc.evaluate("(-8) ^ (1/3)"), pow(-8, 1.0/3.0));
 
     EXPECT_DOUBLE_EQ(calc.evaluate("2 ^ 5 ^ 2"), pow(2, pow(5, 2)));
+
+    EXPECT_THROW(calc.evaluate("0 ^ 0"), Runtime_error);
 }
 
 TEST(ParserPrimaryTest, VariableEvalutation)
