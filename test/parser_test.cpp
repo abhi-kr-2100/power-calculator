@@ -5,6 +5,7 @@
 #include "parser/exceptions.hpp"
 
 using std::pow;
+using std::cbrt;
 
 TEST(ParserPrimaryTest, Numbers)
 {
@@ -134,7 +135,7 @@ TEST(ExpTest, Exponents)
 
     // complex numbers are not yet supported
     EXPECT_THROW(calc.evaluate("(-5) ^ 0.5"), Runtime_error);
-    EXPECT_DOUBLE_EQ(calc.evaluate("(-8) ^ (1/3)"), pow(-8, 1.0/3.0));
+    EXPECT_DOUBLE_EQ(calc.evaluate("(-8) ^ (1/3)"), cbrt(-8));
 
     EXPECT_DOUBLE_EQ(calc.evaluate("2 ^ 5 ^ 2"), pow(2, pow(5, 2)));
 
