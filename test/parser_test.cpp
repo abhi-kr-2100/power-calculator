@@ -143,6 +143,11 @@ TEST(ParserTermTest, CorrectTerms)
     
     EXPECT_DOUBLE_EQ(calc.evaluate("3*0"), 0);
 
+    EXPECT_DOUBLE_EQ(calc.evaluate("5 % 3"), 2);
+    EXPECT_DOUBLE_EQ(calc.evaluate("5 % 3 % 2"), 0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("5.1 % 3.0"), 2.1);
+    EXPECT_DOUBLE_EQ(calc.evaluate("-5.1 % 3.0"), -2.1);
+
     EXPECT_DOUBLE_EQ(calc.evaluate("-7*3"), -21);
     EXPECT_DOUBLE_EQ(calc.evaluate("-7*-3"), 21);
 
@@ -161,6 +166,10 @@ TEST(ParserTermTest, DivisionByZero)
     EXPECT_THROW(calc.evaluate("42/0"), Runtime_error);
     EXPECT_THROW(calc.evaluate("42/-0"), Runtime_error);
     EXPECT_THROW(calc.evaluate("42/+0"), Runtime_error);
+
+    EXPECT_THROW(calc.evaluate("42 % 0"), Runtime_error);
+    EXPECT_THROW(calc.evaluate("42 % +0"), Runtime_error);
+    EXPECT_THROW(calc.evaluate("42 % -0"), Runtime_error);
 }
 
 TEST(ParserTermTest, BadTerms)

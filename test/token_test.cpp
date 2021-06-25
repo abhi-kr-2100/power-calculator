@@ -23,6 +23,11 @@ TEST(TokenizeTest, Operators)
     EXPECT_EQ(divide.size(), 1);
     EXPECT_EQ(divide[0].kind, Token_type::operator_type);
     EXPECT_EQ(divide[0].op, '/');
+
+    auto mod = tokenize("%");
+    EXPECT_EQ(mod.size(), 1);
+    EXPECT_EQ(mod[0].kind, Token_type::operator_type);
+    EXPECT_EQ(divide[0].op, '%');
     
     auto paren_open = tokenize("(");
     EXPECT_EQ(paren_open.size(), 1);
