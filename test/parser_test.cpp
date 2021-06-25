@@ -168,6 +168,8 @@ TEST(ParserPrimaryTest, FactorialTest)
 
     EXPECT_THROW(calc.evaluate("(-1)!"), Runtime_error);
     EXPECT_THROW(calc.evaluate("(-42)!"), Runtime_error);
+
+    EXPECT_THROW(calc.evaluate("!"), Syntax_error);
 }
 
 TEST(ParserTermTest, CorrectTerms)
