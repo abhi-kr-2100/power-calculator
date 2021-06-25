@@ -1,6 +1,10 @@
 #include <gtest/gtest.h>
+#include <cmath>
+
 #include "parser/parser.hpp"
 #include "parser/exceptions.hpp"
+
+using std::pow;
 
 TEST(ParserPrimaryTest, Numbers)
 {
@@ -109,6 +113,28 @@ TEST(StatementTest, VariableDeclaration)
     EXPECT_THROW(calc.evaluate("let x -= 5"), Syntax_error);
 
     EXPECT_THROW(calc.evaluate("let pi = 2.18"), Runtime_error);
+}
+
+TEST(ExpTest, Exponents)
+{
+    Parser calc;
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("2 ^ 5"), pow(2, 5));
+    EXPECT_DOUBLE_EQ(calc.evaluate("2 ^ -5"), pow(2, -5));
+    EXPECT_DOUBLE_EQ(calc.evaluate("2.1 ^ 3"), pow(2.1, 3));
+    EXPECT_DOUBLE_EQ(calc.evaluate("2.1 ^ 1.1"), pow(2.1, 1.1));
+    EXPECT_DOUBLE_EQ(calc.evaluate("4 ^ 0.5"), pow(4, 0.5));
+
+    // ^ binds tighter than ^, so - a ^ b == -(a ^ b)
+    EXPECT_DOUBLE_EQ(calc.evaluate("-2 ^ 3"), -pow(2, 3));
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("(-2) ^ 2"), pow(-2, 2));
+    EXPECT_DOUBLE_EQ(calc.evaluate("(-2) ^ (-2)"), pow(-2, -2));
+    EXPECT_DOUBLE_EQ(calc.evaluate("2 ^ (-2)"), pow(2, -2));
+
+    // complex numbers are not yet supported
+    EXPECT_THROW(calc.evaluate("(-5) ^ 0.5"), Runtime_error);
+    EXPECT_DOUBLE_EQ(calc.evaluate("(-8) ^ (1/3)"), pow(-8, 1.0/3.0));
 }
 
 TEST(ParserPrimaryTest, VariableEvalutation)

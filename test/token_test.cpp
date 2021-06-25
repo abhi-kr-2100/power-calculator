@@ -27,7 +27,12 @@ TEST(TokenizeTest, Operators)
     auto mod = tokenize("%");
     EXPECT_EQ(mod.size(), 1);
     EXPECT_EQ(mod[0].kind, Token_type::operator_type);
-    EXPECT_EQ(divide[0].op, '%');
+    EXPECT_EQ(mod[0].op, '%');
+
+    auto exp = tokenize("^");
+    EXPECT_EQ(exp.size(), 1);
+    EXPECT_EQ(exp[0].kind, Token_type::operator_type);
+    EXPECT_EQ(exp[0].op, '^');
     
     auto paren_open = tokenize("(");
     EXPECT_EQ(paren_open.size(), 1);
