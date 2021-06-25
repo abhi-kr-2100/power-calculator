@@ -42,6 +42,7 @@ using Token_iter = std::vector<Token>::const_iterator;
  *      Primary ^ Exponent
  *      Primary
  * Primary:
+ *      Primary!
  *      ( Expression )
  *      Number
  *      VariableName

@@ -17,6 +17,7 @@ using std::pow;
 using std::numeric_limits;
 using std::fabs;
 using std::cbrt;
+using std::tgamma;
 
 using ull = unsigned long long;
 using ll = long long;
@@ -324,6 +325,24 @@ double Parser::exponent(const Token_iter& s, const Token_iter& e)
 
 double Parser::primary(const Token_iter& s, const Token_iter& e)
 {
+    if ((e - 1)->op == '!')
+    {
+        if (s == (e - 1))
+        {
+            throw Syntax_error{"Argument for '!' not provided."};
+        }
+
+        auto arg = primary(s, e - 1);
+        if (arg < 0)
+        {
+            throw Runtime_error{
+                "Factorial is only defined for non-negative numbers."};
+        }
+
+        // tgamma(x + 1) == x!
+        return tgamma(arg + 1);
+    }
+    
     if (s->kind == Token_type::number || s->kind == Token_type::identifier)
     {
         /**

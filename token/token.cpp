@@ -24,6 +24,7 @@ std::vector<Token> tokenize(const std::string& expr)
         case '*':
         case '/':
         case '^':
+        case '!':
         case '(':
         case ')':
         case '=':
