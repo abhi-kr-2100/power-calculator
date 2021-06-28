@@ -368,9 +368,7 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
         return s->val;
     }
 
-    switch (s->op)
-    {
-    case '(':
+    if (s->op == '(')
     {
         if ((e - 1)->op != ')')
         {
@@ -378,11 +376,6 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
         }
 
         return expression(s + 1, e - 1);
-    }
-    // case '+':
-    //     return +primary(s + 1, e);
-    // case '-':
-    //     return -primary(s + 1, e);
     }
 
     throw Syntax_error{"Primary expected."};
