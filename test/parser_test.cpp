@@ -302,4 +302,6 @@ TEST(ParserAssignmentTest, BadAssignments)
     EXPECT_THROW(calc.evaluate("=28"), Syntax_error);
     EXPECT_THROW(calc.evaluate("x=42"), Runtime_error);
     EXPECT_THROW(calc.evaluate("x="), Syntax_error);
+    EXPECT_THROW(calc.evaluate("x 5 = 12"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5 x = 42"), Syntax_error);
 }
