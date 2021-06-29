@@ -277,3 +277,20 @@ TEST(ParserExpressionTest, BadExpressions)
     EXPECT_THROW(calc.evaluate("5)))"), Syntax_error);
     EXPECT_THROW(calc.evaluate("5((("), Syntax_error);
 }
+
+TEST(ParserExpressionTest, Assignment)
+{
+    Parser calc;
+    calc.evaluate("let x = 42");
+    calc.evaluate("let y = 28");
+    calc.evaluate("let z = 0");
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("x = 28"), 28.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("x = x + 2"), 30.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("x"), 30.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("5 + (z = 1)"), 6.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("x = y = z = 42"), 42.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("x"), 42.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("y"), 42.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("z"), 42.0);
+}
