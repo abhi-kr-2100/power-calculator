@@ -27,7 +27,11 @@ using Token_iter = std::vector<Token>::const_iterator;
  *      "let" VariableName "=" Expression
  * VariableName:
  *      any valid C++ identifier
+ * Assignment: (see "Why is Assignment defined like this?" below.)
+ *      Assignment "=" Assignment
+ *      Expression
  * Expression:
+ *      VariableName "=" Expression
  *      Expression + Term
  *      Expression - Term
  *      Term
@@ -43,11 +47,16 @@ using Token_iter = std::vector<Token>::const_iterator;
  *      Primary
  * Primary:
  *      Primary!
- *      ( Expression )
+ *      ( Assignment )
  *      Number
  *      VariableName
  * Number:
  *      a valid C++ double literal
+ * 
+ * -- Why is Exponent defined like this? --
+ * 
+ * Assignment must be able to handle cases of chain assignments: "x = y = 4*3".
+ * Moreover, "5 + (x = 1)" is also meaningful.
  * 
  * -- Why is Exponent defined like this? --
  * 
@@ -68,6 +77,7 @@ private:
     std::unordered_map<std::string, double> variables_table;
     
     double variable_declaration(const Token_iter& s, const Token_iter& e);
+    double assignment(const Token_iter& s, const Token_iter& e);
     double expression(const Token_iter& s, const Token_iter& e);
     double term(const Token_iter& s, const Token_iter& e);
     double exponent(const Token_iter& s, const Token_iter& e);

@@ -158,6 +158,46 @@ pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
     return {s, 0};
 }
 
+/**
+ * Return the location of `to_find` in [s:e). If not found, return `e`.
+ * Additionally, unless `chk_nesting` is `Check_nesting::no`, find only those
+ * instances which don't occur inside parentheses.
+*/
+Token_iter find_forward(Token_iter s, Token_iter e, char to_find,
+    Check_nesting chk_nesting = Check_nesting::yes)
+{
+    // nothing to search
+    if (e == s)
+    {
+        return s;
+    }
+
+    ull nesting = 0;    // how many levels deep are we nested between '(' ')'
+                        // only affected if chk_nesting is Check_nesting::yes
+    for (; s != e; ++s)
+    {
+        if (chk_nesting == Check_nesting::yes)
+        {
+            switch (s->op)
+            {
+            case '(':
+                ++nesting;
+                break;
+            case ')':
+                --nesting;
+                break;
+            }
+        }
+
+        if (s->op == to_find && !nesting)
+        {
+            return s;
+        }
+    }
+
+    return e;
+}
+
 double Parser::evaluate(const string& expr)
 {
     auto tokens = tokenize(expr);
@@ -172,7 +212,7 @@ double Parser::evaluate(const string& expr)
         return variable_declaration(tokens.begin(), tokens.end());
     }
     
-    return expression(tokens.begin(), tokens.end());
+    return assignment(tokens.begin(), tokens.end());
 }
 
 double Parser::variable_declaration(const Token_iter& s, const Token_iter& e)
@@ -220,6 +260,44 @@ double Parser::variable_declaration(const Token_iter& s, const Token_iter& e)
 
     auto val = expression(exp_iter, e);
     variables_table[var_name] = val;
+
+    return val;
+}
+
+double Parser::assignment(const Token_iter& s, const Token_iter& e)
+{
+    auto i = find_forward(s, e, '=');
+
+    if (i == s)     // consider: "=5"
+    {
+        throw Syntax_error{"No variable to assign to."};
+    }
+
+    if (i == e)
+    {
+        return expression(s, e);
+    }
+
+    // consider:
+    // "5 x = 5" or "4 = 5"
+    if (s + 1 != i || s->kind != Token_type::identifier)
+    {
+        throw Syntax_error{"Not a valid L-value expression."};
+    }
+
+    if (i + 1 == e)
+    {
+        throw Syntax_error{"Nothing to assign."};
+    }
+
+    auto var = variables_table.find(s->name);
+    if (var == variables_table.end())
+    {
+        throw Runtime_error{"Variable not defined."};
+    }
+
+    double val = assignment(i + 1, e);
+    variables_table[s->name] = val;
 
     return val;
 }
@@ -375,7 +453,7 @@ double Parser::primary(const Token_iter& s, const Token_iter& e)
             throw Syntax_error{"Missing ')'."};
         }
 
-        return expression(s + 1, e - 1);
+        return assignment(s + 1, e - 1);
     }
 
     throw Syntax_error{"Primary expected."};
