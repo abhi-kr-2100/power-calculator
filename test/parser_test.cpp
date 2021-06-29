@@ -294,3 +294,12 @@ TEST(ParserAssignmentTest, Assignment)
     EXPECT_DOUBLE_EQ(calc.evaluate("y"), 42.0);
     EXPECT_DOUBLE_EQ(calc.evaluate("z"), 42.0);
 }
+
+TEST(ParserAssignmentTest, BadAssignments)
+{
+    Parser calc;
+
+    EXPECT_THROW(calc.evaluate("=28"), Syntax_error);
+    EXPECT_THROW(calc.evaluate("x=42"), Runtime_error);
+    EXPECT_THROW(calc.evaluate("x="), Syntax_error);
+}
