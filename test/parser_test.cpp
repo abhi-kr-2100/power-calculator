@@ -278,7 +278,7 @@ TEST(ParserExpressionTest, BadExpressions)
     EXPECT_THROW(calc.evaluate("5((("), Syntax_error);
 }
 
-TEST(ParserExpressionTest, Assignment)
+TEST(ParserAssignmentTest, Assignment)
 {
     Parser calc;
     calc.evaluate("let x = 42");
