@@ -127,6 +127,8 @@ TEST(ExpTest, Exponents)
     EXPECT_DOUBLE_EQ(calc.evaluate("2.1 ^ 1.1"), pow(2.1, 1.1));
     EXPECT_DOUBLE_EQ(calc.evaluate("4 ^ 0.5"), pow(4, 0.5));
 
+    EXPECT_DOUBLE_EQ(calc.evaluate("(2^2)"), pow(2, 2));
+
     // ^ binds tighter than ^, so - a ^ b == -(a ^ b)
     EXPECT_DOUBLE_EQ(calc.evaluate("-2 ^ 3"), -pow(2, 3));
 
