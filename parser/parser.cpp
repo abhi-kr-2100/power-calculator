@@ -12,8 +12,7 @@ double Parser::evaluate(const string& expr)
         throw Syntax_error{"Empty expression."};
     }
 
-    if (tokens[0].kind == Token_type::identifier &&
-        tokens[0].name == var_declaration_key)
+    if (is_variable_declaration(tokens))
     {
         return variable_declaration(tokens.begin(), tokens.end());
     }

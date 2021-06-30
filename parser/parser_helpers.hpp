@@ -19,6 +19,11 @@ using std::string;
 
 using ull = unsigned long long;
 
+bool is_variable_declaration(const vector<Token>& tokens)
+{
+    return tokens[0].name == Parser::var_declaration_key;
+}
+
 bool doubles_equal(double a, double b)
 {
     return fabs(a - b) < numeric_limits<double>::epsilon();
