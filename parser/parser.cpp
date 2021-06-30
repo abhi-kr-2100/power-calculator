@@ -34,7 +34,7 @@ bool contains(const vector<T>& v, const T& e)
 }
 
 /**
- * Does the given string represent a valid C++ identifier?
+ * Is the given identifier a reserved keyword?
 */
 bool is_keyword(const string& s)
 {
