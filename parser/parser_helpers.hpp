@@ -32,6 +32,24 @@ bool is_keyword(const string& s)
     return false;
 }
 
+/**
+ * Is the variable assignment spanned by [s:e) syntactically correct?
+ * 
+ * op_pos is the position of the assignment operator.
+ * 
+ * A valid assignment syntax is:
+ * VariableName "=" Expression
+*/
+bool is_valid_variable_assignment_syntax(const Token_iter& s,
+    const Token_iter& e, const Token_iter& op_pos)
+{
+    return (
+        s->kind == Token_type::identifier &&
+        (s + 1) != e && (s + 1) == op_pos &&
+        (s + 2) != e
+    );
+}
+
 bool is_valid_variable_declaration_syntax(const Token_iter& s,
     const Token_iter& e)
 {

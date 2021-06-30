@@ -45,26 +45,14 @@ double Parser::assignment(const Token_iter& s, const Token_iter& e)
 {
     auto i = find_forward(s, e, '=');
 
-    if (i == s)     // consider: "=5"
-    {
-        throw Syntax_error{"No variable to assign to."};
-    }
-
     if (i == e)
     {
         return expression(s, e);
     }
 
-    // consider:
-    // "5 x = 5" or "4 = 5"
-    if (s + 1 != i || s->kind != Token_type::identifier)
+    if (!is_valid_variable_assignment_syntax(s, e, i))
     {
-        throw Syntax_error{"Not a valid L-value expression."};
-    }
-
-    if (i + 1 == e)
-    {
-        throw Syntax_error{"Nothing to assign."};
+        throw Syntax_error{"Not a valid assignment."};
     }
 
     auto var = variables_table.find(s->name);
