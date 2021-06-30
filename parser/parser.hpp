@@ -72,7 +72,7 @@ public:
     double evaluate(const std::string& expr);
 
     // the keyword used to introduce a new variable
-    const std::string var_declaration_key = "let";
+    inline static const std::string var_declaration_key = "let";
 private:
     std::unordered_map<std::string, double> variables_table;
     
