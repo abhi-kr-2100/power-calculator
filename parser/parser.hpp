@@ -70,10 +70,10 @@ class Parser
 {
 public:
     double evaluate(const std::string& expr);
-private:
+
     // the keyword used to introduce a new variable
     const std::string var_declaration_key = "let";
-
+private:
     std::unordered_map<std::string, double> variables_table;
     
     double variable_declaration(const Token_iter& s, const Token_iter& e);
