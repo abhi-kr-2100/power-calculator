@@ -128,8 +128,7 @@ double Parser::exponent(const Token_iter& s, const Token_iter& e)
         return +exponent(s + 1, e);
     }
 
-    auto is_exp_operator = [](const Token& t) { return t.op == '^'; };
-    auto exp_pos = find_if(s, e, is_exp_operator);
+    auto exp_pos = find_forward(s, e, '^');
     if (exp_pos != e)
     {
         auto base = primary(s, exp_pos);
