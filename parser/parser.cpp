@@ -22,47 +22,19 @@ double Parser::evaluate(const string& expr)
 
 double Parser::variable_declaration(const Token_iter& s, const Token_iter& e)
 {
-    if (!(s->kind == Token_type::identifier && s->name == var_declaration_key))
+    if (!is_valid_variable_declaration_syntax(s, e))
     {
-        throw Syntax_error{var_declaration_key + " was expected."};
+        throw Syntax_error{"Invalid variable declaration syntax."};
     }
 
     auto var_name_iter = s + 1;
-    if (var_name_iter == e)
-    {
-        throw Syntax_error{"Incomplete variable declaration."};
-    }
-    if (var_name_iter->kind != Token_type::identifier)
-    {
-        throw Syntax_error{"A variable's name was expected."};
-    }
-    if (is_keyword(var_name_iter->name))
-    {
-        throw Syntax_error{var_name_iter->name + " is a reserved keyword."};
-    }
-
     auto var_name = var_name_iter->name;
     if (variables_table.find(var_name) != variables_table.end())
     {
         throw Runtime_error{"Redeclaration of variable."};
     }
 
-    auto equal_sign_iter = s + 2;
-    if (equal_sign_iter == e)
-    {
-        throw Syntax_error{"Incomplete variable declaration."};
-    }
-    if (equal_sign_iter->op != '=')
-    {
-        throw Syntax_error{"An equal sign ('=') was expected."};
-    }
-
     auto exp_iter = s + 3;
-    if (exp_iter == e)
-    {
-        throw Syntax_error{"No expression given to assign."};
-    }
-
     auto val = expression(exp_iter, e);
     variables_table[var_name] = val;
 

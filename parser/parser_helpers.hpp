@@ -19,6 +19,31 @@ using std::string;
 
 using ull = unsigned long long;
 
+/**
+ * Is the given identifier a reserved keyword?
+*/
+bool is_keyword(const string& s)
+{
+    if (s == "let")
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool is_valid_variable_declaration_syntax(const Token_iter& s,
+    const Token_iter& e)
+{
+    return (
+        s->name == Parser::var_declaration_key &&
+        (s + 1) != e && (s + 1)->kind == Token_type::identifier &&
+        !is_keyword((s + 1)->name) &&
+        (s + 2) != e && (s + 2)->op == '=' &&
+        (s + 3) != e
+    );
+}
+
 bool is_variable_declaration(const vector<Token>& tokens)
 {
     return tokens[0].name == Parser::var_declaration_key;
@@ -33,19 +58,6 @@ template <class T>
 bool contains(const vector<T>& v, const T& e)
 {
     return find(v.begin(), v.end(), e) != v.end();
-}
-
-/**
- * Is the given identifier a reserved keyword?
-*/
-bool is_keyword(const string& s)
-{
-    if (s == "let")
-    {
-        return true;
-    }
-
-    return false;
 }
 
 /** Used to indicate whether characters occuring inside parentheses should be
