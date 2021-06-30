@@ -166,6 +166,9 @@ TEST(ParserPrimaryTest, FactorialTest)
     EXPECT_DOUBLE_EQ(calc.evaluate("-12!"), -tgamma(12 + 1));
     EXPECT_DOUBLE_EQ(calc.evaluate("(-0)!"), tgamma(-0 + 1));
 
+    EXPECT_DOUBLE_EQ(calc.evaluate("5! / 2!"), 3 * 4 * 5);
+    EXPECT_DOUBLE_EQ(calc.evaluate("1! + 2!"), 3);
+
     EXPECT_THROW(calc.evaluate("(-1)!"), Runtime_error);
     EXPECT_THROW(calc.evaluate("(-42)!"), Runtime_error);
 
