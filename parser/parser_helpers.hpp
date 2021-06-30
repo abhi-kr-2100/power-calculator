@@ -16,8 +16,11 @@ using std::find;
 using std::pair;
 using std::vector;
 using std::string;
+using std::cbrt;
+using std::pow;
 
 using ull = unsigned long long;
+using ll = long long;
 
 /**
  * Is the given identifier a reserved keyword?
@@ -76,6 +79,39 @@ template <class T>
 bool contains(const vector<T>& v, const T& e)
 {
     return find(v.begin(), v.end(), e) != v.end();
+}
+
+/**
+ * Like std::pow but can take cube roots.
+ * Also, throws Runtime_error on uncomputable powers.
+ * 
+ * Rules for exponentiation:
+ *  - base is -ve and exp is non-integer and exp != 1/3 -> error
+ *  - base is -ve and exp == 1/3 -> std::cbrt(base)
+ *  - base is 0 and exp is non-positive -> error
+ *  - otherwise -> pow(base, exp)
+*/
+double power(double base, double exp)
+{
+    if (base < 0)
+    {
+        if (doubles_equal(exp, 1.0 / 3.0))
+        {
+            return cbrt(base);
+        }
+
+        if (!doubles_equal(ll(exp), exp))
+        {
+            throw Runtime_error{
+                "Can't compute fractional exponent of negative base."};
+        }
+    }
+    if (base == 0 && exp <= 0)
+    {
+        throw Runtime_error{"Undefined exponent."};
+    }
+
+    return pow(base, exp);
 }
 
 /** Used to indicate whether characters occuring inside parentheses should be

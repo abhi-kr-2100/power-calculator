@@ -2,8 +2,6 @@
 #include "exceptions.hpp"
 #include "parser/parser_helpers.hpp"
 
-using ll = long long;
-
 double Parser::evaluate(const string& expr)
 {
     auto tokens = tokenize(expr);
@@ -134,32 +132,7 @@ double Parser::exponent(const Token_iter& s, const Token_iter& e)
         auto base = primary(s, exp_pos);
         auto exp = exponent(exp_pos + 1, e);
 
-        /**
-         * Rules for exponentiation:
-         *  - base is -ve and exp is non-integer and exp != 1/3 -> error
-         *  - base is -ve and exp == 1/3 -> std::cbrt(base)
-         *  - base is 0 and exp is non-positive -> error
-         *  - otherwise -> pow(base, exp)
-        */
-        if (base < 0)
-        {
-            if (doubles_equal(exp, 1.0 / 3.0))
-            {
-                return cbrt(base);
-            }
-
-            if (!doubles_equal(ll(exp), exp))
-            {
-                throw Runtime_error{
-                    "Can't compute fractional exponent of negative base."};
-            }
-        }
-        if (base == 0 && exp <= 0)
-        {
-            throw Runtime_error{"Undefined exponent."};
-        }
-
-        return pow(base, exp);
+        return power(base, exp);
     }
 
     return primary(s, e);
