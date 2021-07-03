@@ -19,6 +19,9 @@ using std::exit;
 using std::exception;
 using std::cerr;
 
+/**
+ * Display prompt -> take input -> print result/error.
+*/
 void calculate(Parser& calc)
 {
     constexpr auto prompt = "> ";

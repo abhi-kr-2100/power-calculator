@@ -10,6 +10,11 @@ using std::isalpha;
 using std::isalnum;
 using std::string;
 
+/**
+ * Return a vector of tokens obtained from breaking the given string into
+ * valid tokens.
+ * If an unknown token is encountered, throw an Unknown_token exception.
+*/
 std::vector<Token> tokenize(const std::string& expr)
 {
     istringstream ss{expr};
