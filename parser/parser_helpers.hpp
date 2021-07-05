@@ -138,6 +138,7 @@ enum class Check_nesting { yes, no };
  *  - must not occur after an operator
  *      - however, the client code can provide a vector of operators which
  *        can occur befor the character under consideration
+ *          - by default, '(', ')', and '!' can occur before the operators
  * 
  * chk_nesting can override whether to_find characters occuring inside
  * parentheses will be considered. If chk_nesting is set to Check_nesting::yes,
@@ -178,7 +179,7 @@ enum class Check_nesting { yes, no };
 */
 pair<Token_iter, char> reverse_search(Token_iter s, Token_iter e,
     vector<char> to_find, Check_nesting chk_nesting = Check_nesting::yes,
-    vector<char> prev_op_ignore = {'(', ')'})
+    vector<char> prev_op_ignore = {'(', ')', '!'})
 {
     // nothing to search
     if (e == s)
