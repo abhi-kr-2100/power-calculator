@@ -7,7 +7,7 @@ quickly at a text terminal.
 
 ## Features
 
-Version 1.5.2 of `pcalc` supports the following features:
+Version 1.6.0 of `pcalc` supports the following features:
 
 * Basic four arithmetic operations
 * Parentheses to override order of operations
@@ -15,6 +15,7 @@ Version 1.5.2 of `pcalc` supports the following features:
 * Powerful exponentiation operator
 * Factorial operator that can handle real numbers
 * User-defined variables
+* Ability to use an external variable table
 
 Future releases will implement the following additional features:
 
