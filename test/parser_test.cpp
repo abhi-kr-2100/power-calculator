@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include <cmath>
+#include <map>
+#include <string>
 
 #include "parser/parser.hpp"
 #include "parser/exceptions.hpp"
@@ -7,6 +9,8 @@
 using std::pow;
 using std::cbrt;
 using std::tgamma;
+using std::map;
+using std::string;
 
 TEST(ParserPrimaryTest, Numbers)
 {
@@ -117,6 +121,21 @@ TEST(StatementTest, VariableDeclaration)
     EXPECT_THROW(calc.evaluate("let pi = 2.18"), Runtime_error);
 }
 
+TEST(StatementTest, ExternalVariableDeclaration)
+{
+    Parser calc;
+    map<string, double> vtab;
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("let pi = 3.14", vtab), 3.14);
+    EXPECT_THROW(calc.evaluate("let let = 2", vtab), Syntax_error);
+    EXPECT_THROW(calc.evaluate("let", vtab), Syntax_error);
+    EXPECT_THROW(calc.evaluate("let x", vtab), Syntax_error);
+    EXPECT_THROW(calc.evaluate("let x =", vtab), Syntax_error);
+    EXPECT_THROW(calc.evaluate("let x -= 5", vtab), Syntax_error);
+
+    EXPECT_THROW(calc.evaluate("let pi = 2.18", vtab), Runtime_error);
+}
+
 TEST(ExpTest, Exponents)
 {
     Parser calc;
@@ -154,6 +173,18 @@ TEST(ParserPrimaryTest, VariableEvalutation)
     EXPECT_DOUBLE_EQ(calc.evaluate("(x)+(x+2.)"), 10.4);
 
     EXPECT_THROW(calc.evaluate("x + y"), Runtime_error);
+}
+
+TEST(ParserPrimaryTest, ExternalVariableEvalutation)
+{
+    Parser calc;
+    map<string, double> vtab;
+
+    calc.evaluate("let x = 4.2", vtab);
+    EXPECT_DOUBLE_EQ(calc.evaluate("x", vtab), 4.2);
+    EXPECT_DOUBLE_EQ(calc.evaluate("(x)+(x+2.)", vtab), 10.4);
+
+    EXPECT_THROW(calc.evaluate("x + y", vtab), Runtime_error);
 }
 
 TEST(ParserPrimaryTest, FactorialTest)
@@ -300,6 +331,25 @@ TEST(ParserAssignmentTest, Assignment)
     EXPECT_DOUBLE_EQ(calc.evaluate("z"), 42.0);
 }
 
+TEST(ParserAssignmentTest, ExternalVariableAssignment)
+{
+    Parser calc;
+    map<string, double> vtab;
+
+    calc.evaluate("let x = 42", vtab);
+    calc.evaluate("let y = 28", vtab);
+    calc.evaluate("let z = 0", vtab);
+
+    EXPECT_DOUBLE_EQ(calc.evaluate("x = 28", vtab), 28.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("x = x + 2", vtab), 30.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("x", vtab), 30.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("5 + (z = 1)", vtab), 6.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("x = y = z = 42", vtab), 42.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("x", vtab), 42.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("y", vtab), 42.0);
+    EXPECT_DOUBLE_EQ(calc.evaluate("z", vtab), 42.0);
+}
+
 TEST(ParserAssignmentTest, BadAssignments)
 {
     Parser calc;
@@ -309,4 +359,16 @@ TEST(ParserAssignmentTest, BadAssignments)
     EXPECT_THROW(calc.evaluate("x="), Syntax_error);
     EXPECT_THROW(calc.evaluate("x 5 = 12"), Syntax_error);
     EXPECT_THROW(calc.evaluate("5 x = 42"), Syntax_error);
+}
+
+TEST(ParserAssignmentTest, ExternalVariableBadAssignments)
+{
+    Parser calc;
+    map<string, double> vtab;
+
+    EXPECT_THROW(calc.evaluate("=28", vtab), Syntax_error);
+    EXPECT_THROW(calc.evaluate("x=42", vtab), Runtime_error);
+    EXPECT_THROW(calc.evaluate("x=", vtab), Syntax_error);
+    EXPECT_THROW(calc.evaluate("x 5 = 12", vtab), Syntax_error);
+    EXPECT_THROW(calc.evaluate("5 x = 42", vtab), Syntax_error);
 }
