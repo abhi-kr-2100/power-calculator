@@ -8,7 +8,7 @@
 
 #include <string>
 #include <vector>
-#include <unordered_map>
+#include <map>
 
 #include "token/token.hpp"
 
@@ -69,19 +69,30 @@ using Token_iter = std::vector<Token>::const_iterator;
 class Parser
 {
 public:
-    double evaluate(const std::string& expr);
+    double evaluate(const std::string& expr) {
+        return evaluate(expr, variables_table);
+    }
+    
+    double evaluate(const std::string& expr,
+        std::map<std::string, double>& variables_table);
 
     // the keyword used to introduce a new variable
     inline static const std::string var_declaration_key = "let";
 private:
-    std::unordered_map<std::string, double> variables_table;
+    std::map<std::string, double> variables_table;
     
-    double variable_declaration(const Token_iter& s, const Token_iter& e);
-    double assignment(const Token_iter& s, const Token_iter& e);
-    double expression(const Token_iter& s, const Token_iter& e);
-    double term(const Token_iter& s, const Token_iter& e);
-    double exponent(const Token_iter& s, const Token_iter& e);
-    double primary(const Token_iter& s, const Token_iter& e);
+    double variable_declaration(const Token_iter& s, const Token_iter& e,
+        std::map<std::string, double>& variables_table);
+    double assignment(const Token_iter& s, const Token_iter& e,
+        std::map<std::string, double>& variables_table);
+    double expression(const Token_iter& s, const Token_iter& e,
+        std::map<std::string, double>& variables_table);
+    double term(const Token_iter& s, const Token_iter& e,
+        std::map<std::string, double>& variables_table);
+    double exponent(const Token_iter& s, const Token_iter& e,
+        std::map<std::string, double>& variables_table);
+    double primary(const Token_iter& s, const Token_iter& e,
+        std::map<std::string, double>& variables_table);
 };
 
 #endif
