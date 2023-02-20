@@ -2,7 +2,7 @@
 #define A2100_PCALC_TOKEN_EXCEPTIONS   1
 
 /**
- * This module contains expressions thrown by the token library.
+ * This module contains exceptions thrown by the token library.
 */
 
 #include <stdexcept>
