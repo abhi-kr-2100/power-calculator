@@ -53,7 +53,7 @@ using Token_iter = std::vector<Token>::const_iterator;
  * Number:
  *      a valid C++ double literal
  * 
- * -- Why is Exponent defined like this? --
+ * -- Why is Assignment defined like this? --
  * 
  * Assignment must be able to handle cases of chain assignments: "x = y = 4*3".
  * Moreover, "5 + (x = 1)" is also meaningful.

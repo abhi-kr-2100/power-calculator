@@ -2,7 +2,7 @@
 #define A2100_PCALC_PARSER_EXCEPTIONS   1
 
 /**
- * This module contains expressions thrown by the parser library.
+ * This module contains exceptions thrown by the parser library.
 */
 
 #include <stdexcept>
