@@ -49,6 +49,7 @@ class Unit_system
 {
 public:
     Unit_system();
+    Unit_system(const Unit_system &other) = delete;
 
     void add_new_unit(const Unit_information &new_unit);
 
@@ -90,7 +91,7 @@ public:
 
 private:
     double value;
-    Unit_system unit_system;
+    const Unit_system &unit_system;
     std::multiset<std::string> numerator_units;
     std::multiset<std::string> denominator_units;
 };

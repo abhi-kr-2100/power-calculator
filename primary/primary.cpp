@@ -57,12 +57,12 @@ double Unit_system::convert(double v, const string &from, const string &to)
 }
 
 Primary::Primary()
-    : value{}
+    : value{}, unit_system{}
 {
 }
 
 Primary::Primary(double v)
-    : value{v}
+    : value{v}, unit_system{}
 {
 }
 
