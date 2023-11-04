@@ -94,6 +94,8 @@ public:
     Primary operator^(const Primary &other) const;
     Primary factorial() const;
 
+    double get_value() const;
+
 private:
     double value;
     const Unit_system &unit_system;

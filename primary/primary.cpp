@@ -103,6 +103,11 @@ Primary::Primary(double v, const Unit_system &system,
 {
 }
 
+double Primary::get_value() const
+{
+    return value;
+}
+
 Primary Primary::operator+(const Primary &other) const
 {
     return other;
