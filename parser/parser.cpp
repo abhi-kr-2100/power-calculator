@@ -168,7 +168,12 @@ double Parser::primary(const Token_iter& s, const Token_iter& e,
         // tgamma(x + 1) == x!
         return tgamma(arg + 1);
     }
-    
+
+    if ((e - 1)->kind == Token_type::identifier && s != (e - 1))
+    {
+        return primary(s, e - 1, variables_table);
+    }
+
     if (s->kind == Token_type::number || s->kind == Token_type::identifier)
     {
         /**

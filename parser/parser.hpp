@@ -50,8 +50,11 @@ using Token_iter = std::vector<Token>::const_iterator;
  *      ( Assignment )
  *      Number
  *      VariableName
+ *      Primary Unit
  * Number:
  *      a valid C++ double literal
+ * Unit
+ *      any valid C++ identifier
  * 
  * -- Why is Assignment defined like this? --
  * 
