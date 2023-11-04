@@ -1,11 +1,15 @@
 #include <string>
+#include <algorithm>
 
 #include <boost/uuid/uuid_generators.hpp>
 
 #include "primary.hpp"
 #include "exceptions.hpp"
 
+using namespace std::string_literals;
+
 using boost::uuids::random_generator;
+using std::find_if;
 using std::less;
 using std::string;
 
@@ -27,7 +31,29 @@ void Unit_system::add_new_unit(const Unit_information &new_unit_info)
 double Unit_system::convert(double v, const string &from, const string &to)
     const
 {
-    return 0;
+    const auto from_iter = find_if(units.begin(), units.end(), [&from](const auto &e)
+                                   { return e.name == from; });
+    if (from_iter == units.end())
+    {
+        throw Unknown_unit(from + " is not a known unit.");
+    }
+
+    const auto to_iter = find_if(units.begin(), units.end(), [&to](const auto &e)
+                                 { return e.name == to; });
+    if (to_iter == units.end())
+    {
+        throw Unknown_unit(to + " is not a known unit.");
+    }
+
+    if (from_iter->base != to_iter->base)
+    {
+        throw Incompatible_units("Can't convert between "s + from + " and " + to);
+    }
+
+    const auto from_to_base = from_iter->a + v * from_iter->x;
+    const auto base_to_to = (from_to_base - to_iter->a) / to_iter->x;
+
+    return base_to_to;
 }
 
 Primary::Primary()
