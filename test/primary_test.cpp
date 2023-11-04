@@ -415,8 +415,5 @@ TEST(Primary, DifferentCompatibleComplexUnits)
     Primary a(3.14, usys, {"meter", "kilometer"}, {"second", "second"});
     Primary b(2.71, usys, {"kilometer", "kilometer"}, {"hour", "hour"});
 
-    // 3.14 / 1000.0
-    //  0.000277778
-
     EXPECT_NEAR((a + b).get_value(), 3.14 * 3600.0 * 3600.0 / 1000.0, 0.01);
 }
