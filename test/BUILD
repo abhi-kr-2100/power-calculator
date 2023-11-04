@@ -13,3 +13,10 @@ cc_test(
   srcs = ["parser_test.cpp"],
   deps = ["@com_google_googletest//:gtest_main", "//parser:parser"],
 )
+
+cc_test(
+  name = "primary-test",
+  size = "small",
+  srcs = ["primary_test.cpp"],
+  deps = ["@com_google_googletest//:gtest_main", "//primary:primary"],
+)
