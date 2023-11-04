@@ -4,7 +4,8 @@
 #include <set>
 #include <string>
 
-bool addition_compatible(const std::multiset<std::string> &u1,
+bool addition_compatible(const Unit_system &sys,
+                         const std::multiset<std::string> &u1,
                          const std::multiset<std::string> &u2);
 
 #endif
