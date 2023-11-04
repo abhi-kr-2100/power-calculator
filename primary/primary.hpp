@@ -17,7 +17,12 @@
 enum class Unit_type
 {
     length,
-    mass
+    mass,
+    time,
+    electricCurrent,
+    temperature,
+    amountOfSubstance,
+    lightIntensity
 };
 
 /**
