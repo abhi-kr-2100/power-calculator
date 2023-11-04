@@ -164,3 +164,259 @@ TEST(Unit_system, UnknownUnit)
     EXPECT_THROW(usys.convert(0, "meter", "kilogram"), Unknown_unit);
     EXPECT_THROW(usys.convert(1, "kilogram", "meter"), Unknown_unit);
 }
+
+TEST(Primary, UnitlessAddition)
+{
+    Primary a = 5.3;
+    Primary b = 8.2;
+
+    EXPECT_DOUBLE_EQ((a + b).get_value(), 5.3 + 8.2);
+}
+
+TEST(Primary, UnitlessAdditionWithAUnitValue)
+{
+    Primary unitless = 3.14;
+
+    auto usys = Unit_system();
+    usys.add_new_unit(
+        Unit_information{
+            "meter",
+            Unit_type::length,
+            0, 1});
+
+    Primary withUnit(2.71, usys, "meter");
+
+    EXPECT_THROW(unitless + withUnit, Incompatible_units);
+}
+
+TEST(Primary, IncompatibleUnits)
+{
+    auto usys = Unit_system();
+    usys.add_new_unit(
+        Unit_information{
+            "meter",
+            Unit_type::length,
+            0, 1});
+    usys.add_new_unit(
+        Unit_information{
+            "kilogram",
+            Unit_type::mass,
+            0, 1});
+
+    Primary a(3.14, usys, "meter");
+    Primary b(2.17, usys, "kilogram");
+
+    EXPECT_THROW(a + b, Incompatible_units);
+}
+
+TEST(Primary, SameUnit)
+{
+    auto usys = Unit_system();
+    usys.add_new_unit(
+        Unit_information{
+            "meter",
+            Unit_type::length,
+            0, 1});
+
+    Primary l1(3.14, usys, "meter");
+    Primary l2(2.17, usys, "meter");
+
+    EXPECT_DOUBLE_EQ((l1 + l2).get_value(), 3.14 + 2.17);
+}
+
+TEST(Primary, DifferentCompatibleUnits)
+{
+    auto usys = Unit_system();
+
+    usys.add_new_unit(
+        Unit_information{
+            "celsius",
+            Unit_type::temperature,
+            0, 1});
+
+    usys.add_new_unit(
+        Unit_information{
+            "fahrenheit",
+            Unit_type ::temperature,
+            -32.0 * 5.0 / 9.0, 5.0 / 9.0});
+
+    Primary t1(314.217, usys, "celsius");
+    Primary t2(42.52, usys, "fahrenheit");
+
+    EXPECT_NEAR((t1 + t2).get_value(), 597.5906 + 42.52, 0.01);
+}
+
+TEST(Primary, SameCompoundUnit)
+{
+    auto usys = Unit_system();
+
+    usys.add_new_unit(
+        Unit_information{
+            "meter",
+            Unit_type::length,
+            0, 1});
+
+    usys.add_new_unit(
+        Unit_information{
+            "second",
+            Unit_type::time,
+            0, 1});
+
+    Primary a(3.14, usys, {"meter"}, {"second"});
+    Primary b(2.71, usys, {"meter"}, {"second"});
+
+    EXPECT_DOUBLE_EQ((a + b).get_value(), 3.14 + 2.71);
+}
+
+TEST(Primary, DifferentCompoundUnits)
+{
+    auto usys = Unit_system();
+
+    usys.add_new_unit(
+        Unit_information{
+            "meter",
+            Unit_type::length,
+            0, 1});
+    usys.add_new_unit(
+        Unit_information{
+            "kilometer",
+            Unit_type::length,
+            0, 1000});
+
+    usys.add_new_unit(
+        Unit_information{
+            "second",
+            Unit_type::time,
+            0, 1});
+    usys.add_new_unit(
+        Unit_information{
+            "hour",
+            Unit_type::time,
+            0, 60});
+
+    Primary a(3.14, usys, {"meter"}, {"second"});
+    Primary b(2.71, usys, {"kilometer"}, {"hour"});
+
+    EXPECT_NEAR((a + b).get_value(), 11.304 + 2.71, 0.01);
+}
+
+TEST(Primary, IncompatibleCompoundUnits)
+{
+    auto usys = Unit_system();
+
+    usys.add_new_unit(
+        Unit_information{
+            "meter",
+            Unit_type::length,
+            0, 1});
+    usys.add_new_unit(
+        Unit_information{
+            "kilometer",
+            Unit_type::length,
+            0, 1000});
+
+    usys.add_new_unit(
+        Unit_information{
+            "second",
+            Unit_type::time,
+            0, 1});
+    usys.add_new_unit(
+        Unit_information{
+            "kelvin",
+            Unit_type::temperature,
+            0, 1});
+
+    Primary a(3.14, usys, {"meter"}, {"second"});
+    Primary b(2.71, usys, {"kilometer"}, {"kelvin"});
+
+    EXPECT_THROW(a + b, Incompatible_units);
+}
+
+TEST(Primary, SameComplexUnit)
+{
+    auto usys = Unit_system();
+
+    usys.add_new_unit(
+        Unit_information{
+            "meter",
+            Unit_type::length,
+            0, 1});
+
+    usys.add_new_unit(
+        Unit_information{
+            "second",
+            Unit_type::time,
+            0, 1});
+
+    Primary a(3.14, usys, {"meter", "meter"}, {"second", "meter"});
+    Primary b(2.71, usys, {"meter", "meter"}, {"second", "meter"});
+
+    EXPECT_DOUBLE_EQ((a + b).get_value(), 3.14 + 2.71);
+}
+
+TEST(Primary, IncompatibleComplexUnits)
+{
+    auto usys = Unit_system();
+
+    usys.add_new_unit(
+        Unit_information{
+            "meter",
+            Unit_type::length,
+            0, 1});
+    usys.add_new_unit(
+        Unit_information{
+            "kilometer",
+            Unit_type::length,
+            0, 1000});
+
+    usys.add_new_unit(
+        Unit_information{
+            "second",
+            Unit_type::time,
+            0, 1});
+    usys.add_new_unit(
+        Unit_information{
+            "kelvin",
+            Unit_type::temperature,
+            0, 1});
+
+    Primary a(3.14, usys, {"meter", "kelvin"}, {"second", "second"});
+    Primary b(2.71, usys, {"kilometer", "second"}, {"kelvin", "kelvin"});
+
+    EXPECT_THROW(a + b, Incompatible_units);
+}
+
+TEST(Primary, DifferentCompatibleComplexUnits)
+{
+    auto usys = Unit_system();
+
+    usys.add_new_unit(
+        Unit_information{
+            "meter",
+            Unit_type::length,
+            0, 1});
+    usys.add_new_unit(
+        Unit_information{
+            "kilometer",
+            Unit_type::length,
+            0, 1000});
+
+    usys.add_new_unit(
+        Unit_information{
+            "second",
+            Unit_type::time,
+            0, 1});
+    usys.add_new_unit(
+        Unit_information{
+            "hour",
+            Unit_type::time,
+            0, 60});
+
+    Primary a(3.14, usys, {"meter", "kilometer"}, {"second", "second"});
+    Primary b(2.71, usys, {"kilometer", "kilometer"}, {"hour", "hour"});
+
+    // 3.14 / 1000.0
+    //  0.000277778
+
+    EXPECT_NEAR((a + b).get_value(), 3.14 * 3600.0 * 3600.0 / 1000.0, 0.01);
+}
