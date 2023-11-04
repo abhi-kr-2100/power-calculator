@@ -68,6 +68,16 @@ Unit_type Unit_system::get_base(const string &unit) const
     return unit_iter->base;
 }
 
+bool Unit_system::operator==(const Unit_system &other) const
+{
+    return this->tag == other.tag;
+}
+
+bool Unit_system::operator!=(const Unit_system &other) const
+{
+    return !(*this == other);
+}
+
 Primary::Primary()
     : value{}, unit_system{}
 {

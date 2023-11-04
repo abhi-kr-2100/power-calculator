@@ -59,9 +59,12 @@ public:
 
     Unit_type get_base(const std::string &u) const;
 
+    bool operator==(const Unit_system &other) const;
+    bool operator!=(const Unit_system &other) const;
+
 private:
     std::set<Unit_information> units;
-    boost::uuids::uuid tag;
+    const boost::uuids::uuid tag;
 };
 
 /**
