@@ -57,6 +57,8 @@ public:
         double v,
         const std::string &from_unit, const std::string &to_unit) const;
 
+    Unit_type get_base(const std::string &u) const;
+
 private:
     std::set<Unit_information> units;
     boost::uuids::uuid tag;

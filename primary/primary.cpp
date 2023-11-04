@@ -56,6 +56,18 @@ double Unit_system::convert(double v, const string &from, const string &to)
     return base_to_to;
 }
 
+Unit_type Unit_system::get_base(const string &unit) const
+{
+    const auto unit_iter = find_if(units.begin(), units.end(), [&unit](const auto &u)
+                                   { return u.name == unit; });
+    if (unit_iter == units.end())
+    {
+        throw Unknown_unit(unit + " is not a known unit.");
+    }
+
+    return unit_iter->base;
+}
+
 Primary::Primary()
     : value{}, unit_system{}
 {
