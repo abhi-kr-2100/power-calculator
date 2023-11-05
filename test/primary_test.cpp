@@ -166,15 +166,17 @@ TEST(Unit_system, UnknownUnit)
     EXPECT_THROW(usys.convert(1, "kilogram", "meter"), Unknown_unit);
 }
 
-TEST(Primary, UnitlessAddition)
+TEST(Primary, UnitlessOperations)
 {
     Primary a = 5.3;
     Primary b = 8.2;
 
     EXPECT_DOUBLE_EQ((a + b).get_value(), 5.3 + 8.2);
+    EXPECT_DOUBLE_EQ((b - a).get_value(), 8.2 - 5.3);
+    EXPECT_DOUBLE_EQ((a - b).get_value(), 5.3 - 8.2);
 }
 
-TEST(Primary, UnitlessAdditionWithAUnitValue)
+TEST(Primary, UnitlessWithAUnitValue)
 {
     Primary unitless = 3.14;
 
@@ -188,6 +190,8 @@ TEST(Primary, UnitlessAdditionWithAUnitValue)
     Primary withUnit(2.71, usys, "meter");
 
     EXPECT_THROW(unitless + withUnit, Incompatible_units);
+    EXPECT_THROW(unitless - withUnit, Incompatible_units);
+    EXPECT_THROW(withUnit - unitless, Incompatible_units);
 }
 
 TEST(Primary, IncompatibleUnits)
@@ -208,6 +212,8 @@ TEST(Primary, IncompatibleUnits)
     Primary b(2.17, usys, "kilogram");
 
     EXPECT_THROW(a + b, Incompatible_units);
+    EXPECT_THROW(a - b, Incompatible_units);
+    EXPECT_THROW(b - a, Incompatible_units);
 }
 
 TEST(Primary, SameUnit)
@@ -223,6 +229,8 @@ TEST(Primary, SameUnit)
     Primary l2(2.17, usys, "meter");
 
     EXPECT_DOUBLE_EQ((l1 + l2).get_value(), 3.14 + 2.17);
+    EXPECT_DOUBLE_EQ((l1 - l2).get_value(), 3.14 - 2.17);
+    EXPECT_DOUBLE_EQ((l2 - l1).get_value(), 2.17 - 3.14);
 }
 
 TEST(Primary, DifferentCompatibleUnits)
@@ -245,6 +253,7 @@ TEST(Primary, DifferentCompatibleUnits)
     Primary t2(42.52, usys, "fahrenheit");
 
     EXPECT_NEAR((t1 + t2).get_value(), 597.5906 + 42.52, 0.01);
+    EXPECT_NEAR((t1 - t2).get_value(), 597.5906 - 42.52, 0.01);
 }
 
 TEST(Primary, SameCompoundUnit)
@@ -267,6 +276,8 @@ TEST(Primary, SameCompoundUnit)
     Primary b(2.71, usys, {"meter"}, {"second"});
 
     EXPECT_DOUBLE_EQ((a + b).get_value(), 3.14 + 2.71);
+    EXPECT_DOUBLE_EQ((a - b).get_value(), 3.14 - 2.71);
+    EXPECT_DOUBLE_EQ((b - a).get_value(), -(3.14 - 2.71));
 }
 
 TEST(Primary, DifferentCompoundUnits)
@@ -299,6 +310,7 @@ TEST(Primary, DifferentCompoundUnits)
     Primary b(2.71, usys, {"kilometer"}, {"hour"});
 
     EXPECT_NEAR((a + b).get_value(), 11.304 + 2.71, 0.01);
+    EXPECT_NEAR((a - b).get_value(), 11.304 - 2.71, 0.01);
 }
 
 TEST(Primary, IncompatibleCompoundUnits)
@@ -331,6 +343,8 @@ TEST(Primary, IncompatibleCompoundUnits)
     Primary b(2.71, usys, {"kilometer"}, {"kelvin"});
 
     EXPECT_THROW(a + b, Incompatible_units);
+    EXPECT_THROW(a - b, Incompatible_units);
+    EXPECT_THROW(b - a, Incompatible_units);
 }
 
 TEST(Primary, SameComplexUnit)
@@ -353,6 +367,8 @@ TEST(Primary, SameComplexUnit)
     Primary b(2.71, usys, {"meter", "meter"}, {"second", "meter"});
 
     EXPECT_DOUBLE_EQ((a + b).get_value(), 3.14 + 2.71);
+    EXPECT_DOUBLE_EQ((a - b).get_value(), 3.14 - 2.71);
+    EXPECT_DOUBLE_EQ((b - a).get_value(), -(3.14 - 2.71));
 }
 
 TEST(Primary, IncompatibleComplexUnits)
@@ -385,6 +401,8 @@ TEST(Primary, IncompatibleComplexUnits)
     Primary b(2.71, usys, {"kilometer", "second"}, {"kelvin", "kelvin"});
 
     EXPECT_THROW(a + b, Incompatible_units);
+    EXPECT_THROW(b - a, Incompatible_units);
+    EXPECT_THROW(a - b, Incompatible_units);
 }
 
 TEST(Primary, DifferentCompatibleComplexUnits)
@@ -448,7 +466,8 @@ TEST(Primary, DifferentCompatibleComplexUnits)
     Primary a(3.14, usys, {"meter", "fahrenheit"}, {"second", "kilogram"});
     Primary b(2.71, usys, {"kelvin", "kilometer"}, {"hour", "gram"});
 
-    EXPECT_NEAR((a + b).get_value(), 922.05628012, 0.01);
+    EXPECT_NEAR((a + b).get_value(), 919.34628012 + 2.71, 0.01);
+    EXPECT_NEAR((a - b).get_value(), 919.34628012 - 2.71, 0.01);
 }
 
 TEST(Primary, DifferentUnitSystems)
@@ -471,6 +490,8 @@ TEST(Primary, DifferentUnitSystems)
     Primary b(1.0, usys2, "meter");
 
     EXPECT_THROW(a + b, Incompatible_units);
+    EXPECT_THROW(a - b, Incompatible_units);
+    EXPECT_THROW(b - a, Incompatible_units);
 }
 
 TEST(AdditionCompatibility, NoUnits)

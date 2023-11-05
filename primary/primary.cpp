@@ -138,7 +138,28 @@ Primary Primary::operator+(const Primary &other) const
 
 Primary Primary::operator-(const Primary &other) const
 {
-    return other;
+    if (unit_system != other.unit_system)
+    {
+        throw Incompatible_units{
+            "Primaries of different unit systems can't be subtracted."};
+    }
+
+    if (!addition_compatible(numerator_units, other.numerator_units) ||
+        !addition_compatible(denominator_units, other.denominator_units))
+    {
+        throw Incompatible_units{
+            "Primaries measuring different quantities can't be subtracted."};
+    }
+
+    const auto nval = compound_convert(value, unit_system,
+                                       numerator_units, other.numerator_units);
+    const auto dval = compound_convert(1.0, unit_system,
+                                       denominator_units, other.denominator_units);
+    const auto val = nval / dval - other.value;
+
+    return Primary(val, unit_system,
+                   to_units_list(other.numerator_units),
+                   to_units_list(other.denominator_units));
 }
 
 Primary Primary::operator*(const Primary &other) const
