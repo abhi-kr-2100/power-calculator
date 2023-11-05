@@ -4,6 +4,7 @@
 #include <set>
 #include <string>
 #include <map>
+#include <utility>
 
 #include "primary.hpp"
 
@@ -11,44 +12,53 @@ using std::map;
 using std::multiset;
 using std::string;
 
-bool addition_compatible(const Unit_system &sys,
-                         const std::multiset<std::string> &u1,
-                         const std::multiset<std::string> &u2)
+bool addition_compatible(
+    const std::map<Unit_type, std::pair<std::string, size_t>> &u1,
+    const std::map<Unit_type, std::pair<std::string, size_t>> &u2)
 {
-    if (u1.size() != u2.size())
+    for (const auto &[base, unit] : u1)
     {
-        return false;
-    }
-
-    map<Unit_type, size_t> unit_type_counts_1;
-    for (const auto &u : u1)
-    {
-        ++unit_type_counts_1[sys.get_base(u)];
-    }
-
-    map<Unit_type, size_t> unit_type_counts_2;
-    for (const auto &u : u2)
-    {
-        ++unit_type_counts_2[sys.get_base(u)];
-    }
-
-    for (const auto &[base, count] : unit_type_counts_1)
-    {
-        if (unit_type_counts_2[base] != count)
+        const auto [_, count] = unit;
+        if (u2.find(base) == u2.end())
+        {
+            return false;
+        }
+        if (u2.at(base).second != count)
         {
             return false;
         }
     }
 
-    for (const auto &[base, count] : unit_type_counts_2)
+    for (const auto &[base, unit] : u2)
     {
-        if (unit_type_counts_1[base] != count)
+        const auto [_, count] = unit;
+        if (u1.find(base) == u1.end())
+        {
+            return false;
+        }
+        if (u1.at(base).second != count)
         {
             return false;
         }
     }
 
     return true;
+}
+
+std::multiset<std::string> to_units_list(
+    const std::map<Unit_type, std::pair<std::string, size_t>> &units)
+{
+    std::multiset<std::string> units_list;
+    for (const auto &[base, unit] : units)
+    {
+        const auto [unit_name, reps] = unit;
+        for (size_t i = 0; i < reps; ++i)
+        {
+            units_list.insert(unit_name);
+        }
+    }
+
+    return units_list;
 }
 
 #endif

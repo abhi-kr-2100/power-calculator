@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <map>
+#include <utility>
 
 #include <boost/uuid/uuid.hpp>
 
@@ -99,8 +101,8 @@ public:
 private:
     double value;
     const Unit_system &unit_system;
-    std::multiset<std::string> numerator_units;
-    std::multiset<std::string> denominator_units;
+    std::map<Unit_type, std::pair<std::string, size_t>> numerator_units;
+    std::map<Unit_type, std::pair<std::string, size_t>> denominator_units;
 };
 
 #endif
