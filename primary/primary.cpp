@@ -4,6 +4,7 @@
 #include <boost/uuid/uuid_generators.hpp>
 
 #include "primary.hpp"
+#include "primary_helpers.hpp"
 #include "exceptions.hpp"
 
 using namespace std::string_literals;
@@ -148,7 +149,48 @@ double Primary::get_value() const
 
 Primary Primary::operator+(const Primary &other) const
 {
-    return other;
+    if (unit_system != other.unit_system)
+    {
+        throw Incompatible_units{
+            "Primaries of different unit systems can't be added."};
+    }
+
+    if (!addition_compatible(numerator_units, other.numerator_units) ||
+        !addition_compatible(denominator_units, other.denominator_units))
+    {
+        throw Incompatible_units{
+            "Primaries measuring different quantities can't be added."};
+    }
+
+    auto nval = value;
+    for (const auto &[base, nunit] : numerator_units)
+    {
+        const auto &[unit, power] = nunit;
+        const auto convert_to = other.numerator_units.at(base).first;
+
+        for (size_t i = 0; i < power; ++i)
+        {
+            nval = unit_system.convert(nval, unit, convert_to);
+        }
+    }
+
+    auto dval = 1.0;
+    for (const auto &[base, dunit] : denominator_units)
+    {
+        const auto &[unit, power] = dunit;
+        const auto convert_to = other.denominator_units.at(base).first;
+
+        for (size_t i = 0; i < power; ++i)
+        {
+            dval = unit_system.convert(dval, unit, convert_to);
+        }
+    }
+
+    const auto val = nval / dval + other.value;
+
+    return Primary(val, unit_system,
+                   to_units_list(other.numerator_units),
+                   to_units_list(other.denominator_units));
 }
 
 Primary Primary::operator-(const Primary &other) const
