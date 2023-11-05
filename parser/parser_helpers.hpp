@@ -71,14 +71,6 @@ bool is_variable_declaration(const vector<Token> &tokens)
     return tokens[0].name == Parser::var_declaration_key;
 }
 
-/**
- * Are the two given doubles almost equal?
- */
-bool doubles_equal(double a, double b)
-{
-    return fabs(a - b) < numeric_limits<double>::epsilon();
-}
-
 template <class T>
 bool contains(const vector<T> &v, const T &e)
 {
