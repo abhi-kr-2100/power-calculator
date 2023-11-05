@@ -451,6 +451,28 @@ TEST(Primary, DifferentCompatibleComplexUnits)
     EXPECT_NEAR((a + b).get_value(), 922.05628012, 0.01);
 }
 
+TEST(Primary, DifferentUnitSystems)
+{
+    auto usys1 = Unit_system();
+    usys1.add_new_unit(
+        Unit_information{
+            "meter",
+            Unit_type::length,
+            0, 1});
+
+    auto usys2 = Unit_system();
+    usys2.add_new_unit(
+        Unit_information{
+            "meter",
+            Unit_type::length,
+            0, 1});
+
+    Primary a(1.0, usys1, "meter");
+    Primary b(1.0, usys2, "meter");
+
+    EXPECT_THROW(a + b, Incompatible_units);
+}
+
 TEST(AdditionCompatibility, NoUnits)
 {
     EXPECT_TRUE(addition_compatible({}, {}));
