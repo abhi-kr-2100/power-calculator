@@ -7,10 +7,7 @@
 #include <utility>
 
 #include "primary.hpp"
-
-using std::map;
-using std::multiset;
-using std::string;
+#include "exceptions.hpp"
 
 bool addition_compatible(
     const std::map<Unit_type, std::pair<std::string, size_t>> &u1,
@@ -59,6 +56,35 @@ std::multiset<std::string> to_units_list(
     }
 
     return units_list;
+}
+
+std::map<Unit_type, std::pair<std::string, size_t>> to_units_map(
+    const std::multiset<std::string> &units,
+    const Unit_system &usys)
+{
+    std::map<Unit_type, std::pair<std::string, size_t>> units_map;
+
+    for (const auto &unit : units)
+    {
+        const auto base = usys.get_base(unit);
+        if (units_map.find(base) == units_map.end())
+        {
+            units_map[base] = {unit, 1};
+        }
+        else if (units_map[base].first != unit)
+        {
+            throw Different_units_for_same_base{
+                unit + " and " + units_map[base].first +
+                " measure the same quantities but are different. " +
+                "Presently, we require one unit per base."};
+        }
+        else
+        {
+            ++units_map[base].second;
+        }
+    }
+
+    return units_map;
 }
 
 #endif

@@ -99,47 +99,10 @@ Primary::Primary(double v, const Unit_system &system, const string &unit)
 Primary::Primary(double v, const Unit_system &system,
                  const std::multiset<std::string> &nunits,
                  const std::multiset<std::string> &dunits)
-    : value{v}, unit_system{system}
+    : value{v}, unit_system{system},
+      numerator_units{to_units_map(nunits, unit_system)},
+      denominator_units{to_units_map(dunits, unit_system)}
 {
-    for (const auto &nunit : nunits)
-    {
-        const auto base = unit_system.get_base(nunit);
-        if (numerator_units.find(base) == numerator_units.end())
-        {
-            numerator_units[base] = {nunit, 1};
-        }
-        else if (numerator_units[base].first != nunit)
-        {
-            throw Different_units_for_same_base{
-                nunit + " and " + numerator_units[base].first +
-                " measure the same quantities but are different. " +
-                "Presently, we require one unit per base."};
-        }
-        else
-        {
-            ++numerator_units[base].second;
-        }
-    }
-
-    for (const auto &dunit : dunits)
-    {
-        const auto base = unit_system.get_base(dunit);
-        if (denominator_units.find(base) == denominator_units.end())
-        {
-            denominator_units[base] = {dunit, 1};
-        }
-        else if (denominator_units[base].first != dunit)
-        {
-            throw Different_units_for_same_base{
-                dunit + " and " + denominator_units[base].first +
-                " measure the same quantities but are different. " +
-                "Presently, we require one unit per base."};
-        }
-        else
-        {
-            ++denominator_units[base].second;
-        }
-    }
 }
 
 double Primary::get_value() const
