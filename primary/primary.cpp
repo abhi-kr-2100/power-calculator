@@ -15,6 +15,7 @@ using std::find_if;
 using std::fmod;
 using std::less;
 using std::string;
+using std::tgamma;
 
 Unit_system::Unit_system()
     : tag(random_generator()())
@@ -267,5 +268,5 @@ Primary Primary::operator^(const Primary &other) const
 
 Primary Primary::factorial() const
 {
-    return *this;
+    return Primary(tgamma(get_value()), unit_system);
 }
