@@ -292,7 +292,7 @@ TEST(Primary, DifferentCompoundUnits)
         Unit_information{
             "hour",
             Unit_type::time,
-            0, 60});
+            0, 3600});
 
     Primary a(3.14, usys, {"meter"}, {"second"});
     Primary b(2.71, usys, {"kilometer"}, {"hour"});
@@ -410,7 +410,7 @@ TEST(Primary, DifferentCompatibleComplexUnits)
         Unit_information{
             "hour",
             Unit_type::time,
-            0, 60});
+            0, 3600});
 
     Primary a(3.14, usys, {"meter", "kilometer"}, {"second", "second"});
     Primary b(2.71, usys, {"kilometer", "kilometer"}, {"hour", "hour"});
