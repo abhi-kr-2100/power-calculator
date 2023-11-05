@@ -1,9 +1,10 @@
 #include "parser.hpp"
 #include "exceptions.hpp"
 #include "parser/parser_helpers.hpp"
+#include "primary/primary.hpp"
 
-double Parser::evaluate(const string& expr,
-        std::map<std::string, double>& variables_table)
+Primary Parser::evaluate(const string &expr,
+                         std::map<std::string, Primary> &variables_table)
 {
     auto tokens = tokenize(expr);
     if (tokens.size() == 0)
@@ -16,12 +17,12 @@ double Parser::evaluate(const string& expr,
         return variable_declaration(
             tokens.begin(), tokens.end(), variables_table);
     }
-    
+
     return assignment(tokens.begin(), tokens.end(), variables_table);
 }
 
-double Parser::variable_declaration(const Token_iter& s, const Token_iter& e,
-        std::map<std::string, double>& variables_table)
+Primary Parser::variable_declaration(const Token_iter &s, const Token_iter &e,
+                                     std::map<std::string, Primary> &variables_table)
 {
     if (!is_valid_variable_declaration_syntax(s, e))
     {
@@ -37,13 +38,13 @@ double Parser::variable_declaration(const Token_iter& s, const Token_iter& e,
 
     auto exp_iter = s + 3;
     auto val = expression(exp_iter, e, variables_table);
-    variables_table[var_name] = val;
+    variables_table.insert({var_name, val});
 
     return val;
 }
 
-double Parser::assignment(const Token_iter& s, const Token_iter& e,
-        std::map<std::string, double>& variables_table)
+Primary Parser::assignment(const Token_iter &s, const Token_iter &e,
+                           std::map<std::string, Primary> &variables_table)
 {
     auto i = find_forward(s, e, '=');
 
@@ -63,14 +64,15 @@ double Parser::assignment(const Token_iter& s, const Token_iter& e,
         throw Runtime_error{"Variable not defined."};
     }
 
-    double val = assignment(i + 1, e, variables_table);
-    variables_table[s->name] = val;
+    const auto val = assignment(i + 1, e, variables_table);
+    variables_table.erase(s->name);
+    variables_table.insert({s->name, val});
 
     return val;
 }
 
-double Parser::expression(const Token_iter& s, const Token_iter& e,
-        std::map<std::string, double>& variables_table)
+Primary Parser::expression(const Token_iter &s, const Token_iter &e,
+                           std::map<std::string, Primary> &variables_table)
 {
     auto i = reverse_search(s, e, {'+', '-'});
     if (i.first != s)
@@ -78,19 +80,19 @@ double Parser::expression(const Token_iter& s, const Token_iter& e,
         switch (i.second)
         {
         case '+':
-            return expression(s, i.first, variables_table) + \
-                term(i.first + 1, e, variables_table);
+            return expression(s, i.first, variables_table) +
+                   term(i.first + 1, e, variables_table);
         case '-':
-            return expression(s, i.first, variables_table) - \
-                term(i.first + 1, e, variables_table);
+            return expression(s, i.first, variables_table) -
+                   term(i.first + 1, e, variables_table);
         }
     }
 
     return term(s, e, variables_table);
 }
 
-double Parser::term(const Token_iter& s, const Token_iter& e,
-        std::map<std::string, double>& variables_table)
+Primary Parser::term(const Token_iter &s, const Token_iter &e,
+                     std::map<std::string, Primary> &variables_table)
 {
     auto i = reverse_search(s, e, {'*', '/', '%'});
     if (i.first != s)
@@ -98,25 +100,21 @@ double Parser::term(const Token_iter& s, const Token_iter& e,
         switch (i.second)
         {
         case '*':
-            return term(s, i.first, variables_table) * \
-                exponent(i.first + 1, e, variables_table);
+            return term(s, i.first, variables_table) *
+                   exponent(i.first + 1, e, variables_table);
         case '/':
         case '%':
         {
             auto divisor = exponent(i.first + 1, e, variables_table);
-            if (divisor == 0)
-            {
-                throw Runtime_error{"Division or mod by 0."};
-            }
-
             auto t = term(s, i.first, variables_table);
+
             if (i.second == '/')
             {
                 return t / divisor;
             }
             else
             {
-                return fmod(t, divisor);
+                return t % divisor;
             }
         }
         }
@@ -125,8 +123,8 @@ double Parser::term(const Token_iter& s, const Token_iter& e,
     return exponent(s, e, variables_table);
 }
 
-double Parser::exponent(const Token_iter& s, const Token_iter& e,
-        std::map<std::string, double>& variables_table)
+Primary Parser::exponent(const Token_iter &s, const Token_iter &e,
+                         std::map<std::string, Primary> &variables_table)
 {
     switch (s->op)
     {
@@ -142,14 +140,14 @@ double Parser::exponent(const Token_iter& s, const Token_iter& e,
         auto base = primary(s, exp_pos, variables_table);
         auto exp = exponent(exp_pos + 1, e, variables_table);
 
-        return power(base, exp);
+        return base ^ exp;
     }
 
     return primary(s, e, variables_table);
 }
 
-double Parser::primary(const Token_iter& s, const Token_iter& e,
-        std::map<std::string, double>& variables_table)
+Primary Parser::primary(const Token_iter &s, const Token_iter &e,
+                        std::map<std::string, Primary> &variables_table)
 {
     if ((e - 1)->op == '!')
     {
@@ -159,14 +157,7 @@ double Parser::primary(const Token_iter& s, const Token_iter& e,
         }
 
         auto arg = primary(s, e - 1, variables_table);
-        if (arg < 0)
-        {
-            throw Runtime_error{
-                "Factorial is only defined for non-negative numbers."};
-        }
-
-        // tgamma(x + 1) == x!
-        return tgamma(arg + 1);
+        return arg.factorial();
     }
 
     if ((e - 1)->kind == Token_type::identifier && s != (e - 1))
@@ -179,7 +170,7 @@ double Parser::primary(const Token_iter& s, const Token_iter& e,
         /**
          * A primary that is a number, should only be a number. It can't be
          * followed by anything else.
-        */
+         */
         if ((s + 1) != e)
         {
             throw Syntax_error{"Only a primary was expected."};
@@ -195,8 +186,8 @@ double Parser::primary(const Token_iter& s, const Token_iter& e,
 
             return var->second;
         }
-        
-        return s->val;
+
+        return Primary(s->val, unit_system);
     }
 
     if (s->op == '(')
