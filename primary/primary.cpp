@@ -125,30 +125,10 @@ Primary Primary::operator+(const Primary &other) const
             "Primaries measuring different quantities can't be added."};
     }
 
-    auto nval = value;
-    for (const auto &[base, nunit] : numerator_units)
-    {
-        const auto &[unit, power] = nunit;
-        const auto convert_to = other.numerator_units.at(base).first;
-
-        for (size_t i = 0; i < power; ++i)
-        {
-            nval = unit_system.convert(nval, unit, convert_to);
-        }
-    }
-
-    auto dval = 1.0;
-    for (const auto &[base, dunit] : denominator_units)
-    {
-        const auto &[unit, power] = dunit;
-        const auto convert_to = other.denominator_units.at(base).first;
-
-        for (size_t i = 0; i < power; ++i)
-        {
-            dval = unit_system.convert(dval, unit, convert_to);
-        }
-    }
-
+    const auto nval = compound_convert(value, unit_system,
+                                       numerator_units, other.numerator_units);
+    const auto dval = compound_convert(1.0, unit_system,
+                                       denominator_units, other.denominator_units);
     const auto val = nval / dval + other.value;
 
     return Primary(val, unit_system,

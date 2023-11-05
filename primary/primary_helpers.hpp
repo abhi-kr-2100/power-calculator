@@ -87,4 +87,24 @@ std::map<Unit_type, std::pair<std::string, size_t>> to_units_map(
     return units_map;
 }
 
+double compound_convert(
+    double value,
+    const Unit_system &usys,
+    const std::map<Unit_type, std::pair<std::string, size_t>> &from_units,
+    const std::map<Unit_type, std::pair<std::string, size_t>> &to_units)
+{
+    for (const auto &[base, unit_desc] : from_units)
+    {
+        const auto [from_unit, rep] = unit_desc;
+        const auto to_unit = to_units.at(base).first;
+
+        for (size_t i = 0; i < rep; ++i)
+        {
+            value = usys.convert(value, from_unit, to_unit);
+        }
+    }
+
+    return value;
+}
+
 #endif
