@@ -395,6 +395,7 @@ TEST(Primary, DifferentCompatibleComplexUnits)
             "meter",
             Unit_type::length,
             0, 1});
+
     usys.add_new_unit(
         Unit_information{
             "kilometer",
@@ -406,14 +407,45 @@ TEST(Primary, DifferentCompatibleComplexUnits)
             "second",
             Unit_type::time,
             0, 1});
+
     usys.add_new_unit(
         Unit_information{
             "hour",
             Unit_type::time,
             0, 3600});
 
-    Primary a(3.14, usys, {"meter", "kilometer"}, {"second", "second"});
-    Primary b(2.71, usys, {"kilometer", "kilometer"}, {"hour", "hour"});
+    usys.add_new_unit(
+        Unit_information{
+            "celsius",
+            Unit_type::temperature,
+            0, 1});
 
-    EXPECT_NEAR((a + b).get_value(), 3.14 * 3600.0 * 3600.0 / 1000.0, 0.01);
+    usys.add_new_unit(
+        Unit_information{
+            "fahrenheit",
+            Unit_type ::temperature,
+            -32.0 * 5.0 / 9.0, 5.0 / 9.0});
+
+    usys.add_new_unit(
+        Unit_information{
+            "kelvin",
+            Unit_type::temperature,
+            -273.15, 1});
+
+    usys.add_new_unit(
+        Unit_information{
+            "kilogram",
+            Unit_type::mass,
+            0, 1});
+
+    usys.add_new_unit(
+        Unit_information{
+            "gram",
+            Unit_type::mass,
+            0, 0.001});
+
+    Primary a(3.14, usys, {"meter", "fahrenheit"}, {"second", "kilogram"});
+    Primary b(2.71, usys, {"kelvin", "kilometer"}, {"hour", "gram"});
+
+    EXPECT_NEAR((a + b).get_value(), 922.05628012, 0.01);
 }
