@@ -214,7 +214,7 @@ Primary Primary::operator/(const Primary &other) const
             "Primaries of different unit systems can't be multiplied."};
     }
 
-    if ((int)other.get_value() == 0)
+    if (other.get_value() == 0)
     {
         throw Division_by_zero{"Division by 0 is not allowed."};
     }
@@ -232,7 +232,7 @@ Primary Primary::operator%(const Primary &other) const
             "Primaries of different unit systems can't be operated on by mod."};
     }
 
-    if ((int)other.get_value() == 0)
+    if (other.get_value() == 0)
     {
         throw Division_by_zero{"Can't take mod with 0."};
     }
