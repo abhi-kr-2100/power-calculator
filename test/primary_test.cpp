@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "primary/primary.hpp"
+#include "primary/primary_helpers.hpp"
 #include "primary/exceptions.hpp"
 
 TEST(Unit_system, AddNewUnit)
@@ -448,4 +449,51 @@ TEST(Primary, DifferentCompatibleComplexUnits)
     Primary b(2.71, usys, {"kelvin", "kilometer"}, {"hour", "gram"});
 
     EXPECT_NEAR((a + b).get_value(), 922.05628012, 0.01);
+}
+
+TEST(AdditionCompatibility, NoUnits)
+{
+    EXPECT_TRUE(addition_compatible({}, {}));
+}
+
+TEST(AdditionCompatibility, SameUnit)
+{
+    EXPECT_TRUE(addition_compatible(
+        {{Unit_type::length, {"meter", 1}}},
+        {{Unit_type::length, {"meter", 1}}}));
+
+    EXPECT_TRUE(addition_compatible(
+        {{Unit_type::length, {"meter", 3}}},
+        {{Unit_type::length, {"meter", 3}}}));
+
+    EXPECT_TRUE(addition_compatible(
+        {{Unit_type::length, {"meter", 3}}, {Unit_type::mass, {"kg", 1}}},
+        {{Unit_type::mass, {"kg", 1}}, {Unit_type::length, {"meter", 3}}}));
+
+    EXPECT_FALSE(addition_compatible(
+        {{Unit_type::length, {"meter", 3}}},
+        {{Unit_type::length, {"meter", 2}}}));
+
+    EXPECT_FALSE(addition_compatible(
+        {{Unit_type::length, {"meter", 3}}, {Unit_type::mass, {"kg", 1}}},
+        {{Unit_type::length, {"meter", 3}}}));
+}
+
+TEST(AdditionCompatibility, DifferentUnits)
+{
+    EXPECT_TRUE(addition_compatible(
+        {{Unit_type::length, {"meter", 3}}},
+        {{Unit_type::length, {"kilometer", 3}}}));
+
+    EXPECT_TRUE(addition_compatible(
+        {{Unit_type::length, {"meter", 3}}, {Unit_type::mass, {"kg", 2}}},
+        {{Unit_type::length, {"miles", 3}}, {Unit_type::mass, {"gram", 2}}}));
+
+    EXPECT_FALSE(addition_compatible(
+        {{Unit_type::length, {"meter", 3}}},
+        {{Unit_type::mass, {"kilogram", 3}}}));
+
+    EXPECT_FALSE(addition_compatible(
+        {{Unit_type::length, {"meter", 3}}, {Unit_type::mass, {"kg", 2}}},
+        {{Unit_type::length, {"miles", 3}}, {Unit_type::time, {"hour", 2}}}));
 }
