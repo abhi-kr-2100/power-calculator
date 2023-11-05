@@ -268,7 +268,7 @@ Primary Primary::operator^(const Primary &other) const
 
 Primary Primary::factorial() const
 {
-    return Primary(tgamma(get_value()), unit_system);
+    return Primary(tgamma(get_value() + 1), unit_system);
 }
 
 Primary Primary::operator+() const
