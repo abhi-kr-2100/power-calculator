@@ -81,6 +81,7 @@ class Primary
 public:
     Primary();
     Primary(double v);
+    Primary(double v, const Unit_system &system);
     Primary(double v, const Unit_system &system, const std::string &unit);
     Primary(
         double v,

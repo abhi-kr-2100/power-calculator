@@ -89,6 +89,11 @@ Primary::Primary(double v)
 {
 }
 
+Primary::Primary(double v, const Unit_system &system)
+    : value{v}, unit_system{system}
+{
+}
+
 Primary::Primary(double v, const Unit_system &system, const string &unit)
     : value{v}, unit_system{system}
 {

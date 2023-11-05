@@ -183,8 +183,6 @@ TEST(Primary, UnitlessOperations)
 
 TEST(Primary, UnitlessWithAUnitValue)
 {
-    Primary unitless = 3.14;
-
     auto usys = Unit_system();
     usys.add_new_unit(
         Unit_information{
@@ -192,6 +190,7 @@ TEST(Primary, UnitlessWithAUnitValue)
             Unit_type::length,
             0, 1});
 
+    Primary unitless(3.14, usys);
     Primary withUnit(2.71, usys, "meter");
 
     EXPECT_THROW(unitless + withUnit, Incompatible_units);
