@@ -89,6 +89,8 @@ public:
         const std::multiset<std::string> &nunits,
         const std::multiset<std::string> &dunits);
 
+    Primary operator+() const;
+    Primary operator-() const;
     Primary operator+(const Primary &other) const;
     Primary operator-(const Primary &other) const;
     Primary operator*(const Primary &other) const;

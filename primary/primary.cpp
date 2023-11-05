@@ -270,3 +270,15 @@ Primary Primary::factorial() const
 {
     return Primary(tgamma(get_value()), unit_system);
 }
+
+Primary Primary::operator+() const
+{
+    return (*this);
+}
+
+Primary Primary::operator-() const
+{
+    return Primary(-get_value(), unit_system,
+                   to_units_list(numerator_units),
+                   to_units_list(denominator_units));
+}
