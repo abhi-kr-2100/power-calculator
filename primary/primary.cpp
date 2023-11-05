@@ -1,5 +1,6 @@
 #include <string>
 #include <algorithm>
+#include <cmath>
 
 #include <boost/uuid/uuid_generators.hpp>
 
@@ -11,6 +12,7 @@ using namespace std::string_literals;
 
 using boost::uuids::random_generator;
 using std::find_if;
+using std::fmod;
 using std::less;
 using std::string;
 
@@ -223,7 +225,33 @@ Primary Primary::operator/(const Primary &other) const
 
 Primary Primary::operator%(const Primary &other) const
 {
-    return other;
+    if (unit_system != other.unit_system)
+    {
+        throw Incompatible_units{
+            "Primaries of different unit systems can't be operated on by mod."};
+    }
+
+    if ((int)other.get_value() == 0)
+    {
+        throw Division_by_zero{"Can't take mod with 0."};
+    }
+
+    if (!addition_compatible(numerator_units, other.numerator_units) ||
+        !addition_compatible(denominator_units, other.denominator_units))
+    {
+        throw Incompatible_units{
+            "Primaries measuring different quantities can't be operated on by mod."};
+    }
+
+    const auto nval = compound_convert(value, unit_system,
+                                       numerator_units, other.numerator_units);
+    const auto dval = compound_convert(1.0, unit_system,
+                                       denominator_units, other.denominator_units);
+    const auto val = fmod(nval / dval, other.get_value());
+
+    return Primary(val, unit_system,
+                   to_units_list(other.numerator_units),
+                   to_units_list(other.denominator_units));
 }
 
 Primary Primary::operator^(const Primary &other) const

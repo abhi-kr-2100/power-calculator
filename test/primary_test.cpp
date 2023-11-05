@@ -1,8 +1,12 @@
+#include <cmath>
+
 #include <gtest/gtest.h>
 
 #include "primary/primary.hpp"
 #include "primary/primary_helpers.hpp"
 #include "primary/exceptions.hpp"
+
+using std::fmod;
 
 TEST(Unit_system, AddNewUnit)
 {
@@ -179,6 +183,9 @@ TEST(Primary, UnitlessOperations)
     EXPECT_DOUBLE_EQ((a * b).get_value(), 5.3 * 8.2);
     EXPECT_DOUBLE_EQ((b / a).get_value(), 8.2 / 5.3);
     EXPECT_DOUBLE_EQ((a / b).get_value(), 5.3 / 8.2);
+
+    EXPECT_NEAR((a % b).get_value(), fmod(a.get_value(), b.get_value()), 0.01);
+    EXPECT_NEAR((b % a).get_value(), fmod(b.get_value(), a.get_value()), 0.01);
 }
 
 TEST(Primary, UnitlessWithAUnitValue)
@@ -196,6 +203,10 @@ TEST(Primary, UnitlessWithAUnitValue)
     EXPECT_THROW(unitless + withUnit, Incompatible_units);
     EXPECT_THROW(unitless - withUnit, Incompatible_units);
     EXPECT_THROW(withUnit - unitless, Incompatible_units);
+
+    EXPECT_THROW(unitless % withUnit, Incompatible_units);
+    EXPECT_THROW(unitless % withUnit, Incompatible_units);
+    EXPECT_THROW(withUnit % unitless, Incompatible_units);
 
     EXPECT_DOUBLE_EQ((unitless * withUnit).get_value(), 3.14 * 2.71);
     EXPECT_DOUBLE_EQ((unitless / withUnit).get_value(), 3.14 / 2.71);
@@ -222,6 +233,10 @@ TEST(Primary, IncompatibleUnits)
     EXPECT_THROW(a - b, Incompatible_units);
     EXPECT_THROW(b - a, Incompatible_units);
 
+    EXPECT_THROW(a % b, Incompatible_units);
+    EXPECT_THROW(a % b, Incompatible_units);
+    EXPECT_THROW(b % a, Incompatible_units);
+
     EXPECT_DOUBLE_EQ((a * b).get_value(), 3.14 * 2.17);
     EXPECT_DOUBLE_EQ((a / b).get_value(), 3.14 / 2.17);
 }
@@ -244,6 +259,9 @@ TEST(Primary, SameUnit)
 
     EXPECT_DOUBLE_EQ((l1 * l2).get_value(), 3.14 * 2.17);
     EXPECT_DOUBLE_EQ((l1 / l2).get_value(), 3.14 / 2.17);
+
+    EXPECT_NEAR((l1 % l2).get_value(), fmod(3.14, 2.17), 0.01);
+    EXPECT_NEAR((l2 % l1).get_value(), fmod(2.17, 3.14), 0.01);
 }
 
 TEST(Primary, DifferentCompatibleUnits)
@@ -272,6 +290,9 @@ TEST(Primary, DifferentCompatibleUnits)
     EXPECT_NEAR((t1 / t2).get_value(), 597.5906 / 42.52, 0.1);
     EXPECT_NEAR((t2 * t1).get_value(), 5.8444 * 314.217, 0.1);
     EXPECT_NEAR((t2 / t1).get_value(), 5.8444444 / 314.217, 0.1);
+
+    EXPECT_NEAR((t1 % t2).get_value(), fmod(597.5906, 42.52), 0.1);
+    EXPECT_NEAR((t2 % t1).get_value(), fmod(5.8444, 314.217), 0.1);
 }
 
 TEST(Primary, SameCompoundUnit)
@@ -301,6 +322,8 @@ TEST(Primary, SameCompoundUnit)
     EXPECT_DOUBLE_EQ((b * a).get_value(), 3.14 * 2.71);
     EXPECT_DOUBLE_EQ((a / b).get_value(), 3.14 / 2.71);
     EXPECT_DOUBLE_EQ((b / a).get_value(), 2.71 / 3.14);
+
+    EXPECT_NEAR((a % b).get_value(), fmod(3.14, 2.71), 0.01);
 }
 
 TEST(Primary, DifferentCompoundUnits)
@@ -340,6 +363,8 @@ TEST(Primary, DifferentCompoundUnits)
 
     EXPECT_NEAR((a / b).get_value(), 11.304 / 2.71, 0.01);
     EXPECT_NEAR((b / a).get_value(), 2.71 / 11.304, 0.01);
+
+    EXPECT_NEAR((a % b).get_value(), fmod(11.304, 2.71), 0.01);
 }
 
 TEST(Primary, IncompatibleCompoundUnits)
@@ -374,6 +399,8 @@ TEST(Primary, IncompatibleCompoundUnits)
     EXPECT_THROW(a + b, Incompatible_units);
     EXPECT_THROW(a - b, Incompatible_units);
     EXPECT_THROW(b - a, Incompatible_units);
+
+    EXPECT_THROW(a % b, Incompatible_units);
 
     EXPECT_DOUBLE_EQ((a * b).get_value(), 0.00314 * 2.71);
     EXPECT_DOUBLE_EQ((b * a).get_value(), 2710 * 3.14);
@@ -410,6 +437,8 @@ TEST(Primary, SameComplexUnit)
 
     EXPECT_DOUBLE_EQ((a / b).get_value(), 3.14 / 2.71);
     EXPECT_DOUBLE_EQ((b / a).get_value(), 2.71 / 3.14);
+
+    EXPECT_NEAR((a % b).get_value(), fmod(3.14, 2.71), 0.01);
 }
 
 TEST(Primary, IncompatibleComplexUnits)
@@ -444,6 +473,8 @@ TEST(Primary, IncompatibleComplexUnits)
     EXPECT_THROW(a + b, Incompatible_units);
     EXPECT_THROW(b - a, Incompatible_units);
     EXPECT_THROW(a - b, Incompatible_units);
+
+    EXPECT_THROW(a % b, Incompatible_units);
 }
 
 TEST(Primary, DifferentCompatibleComplexUnits)
@@ -509,6 +540,7 @@ TEST(Primary, DifferentCompatibleComplexUnits)
 
     EXPECT_NEAR((a + b).get_value(), 919.34628012 + 2.71, 0.01);
     EXPECT_NEAR((a - b).get_value(), 919.34628012 - 2.71, 0.01);
+    EXPECT_NEAR((a % b).get_value(), fmod(919.34628012, 2.71), 0.01);
 }
 
 TEST(Primary, DifferentUnitSystems)
@@ -533,6 +565,7 @@ TEST(Primary, DifferentUnitSystems)
     EXPECT_THROW(a + b, Incompatible_units);
     EXPECT_THROW(a - b, Incompatible_units);
     EXPECT_THROW(b - a, Incompatible_units);
+    EXPECT_THROW(a % b, Incompatible_units);
 }
 
 TEST(AdditionCompatibility, NoUnits)
