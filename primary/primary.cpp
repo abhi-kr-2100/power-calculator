@@ -263,7 +263,7 @@ Primary Primary::operator^(const Primary &other) const
             "Primaries of different unit systems can't be operated on by exponentiation."};
     }
 
-    return power(get_value(), other.get_value());
+    return Primary(power(get_value(), other.get_value()), unit_system);
 }
 
 Primary Primary::factorial() const
