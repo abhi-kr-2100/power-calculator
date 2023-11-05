@@ -174,6 +174,11 @@ TEST(Primary, UnitlessOperations)
     EXPECT_DOUBLE_EQ((a + b).get_value(), 5.3 + 8.2);
     EXPECT_DOUBLE_EQ((b - a).get_value(), 8.2 - 5.3);
     EXPECT_DOUBLE_EQ((a - b).get_value(), 5.3 - 8.2);
+
+    EXPECT_DOUBLE_EQ((a * a).get_value(), 5.3 * 5.3);
+    EXPECT_DOUBLE_EQ((a * b).get_value(), 5.3 * 8.2);
+    EXPECT_DOUBLE_EQ((b / a).get_value(), 8.2 / 5.3);
+    EXPECT_DOUBLE_EQ((a / b).get_value(), 5.3 / 8.2);
 }
 
 TEST(Primary, UnitlessWithAUnitValue)
@@ -192,6 +197,9 @@ TEST(Primary, UnitlessWithAUnitValue)
     EXPECT_THROW(unitless + withUnit, Incompatible_units);
     EXPECT_THROW(unitless - withUnit, Incompatible_units);
     EXPECT_THROW(withUnit - unitless, Incompatible_units);
+
+    EXPECT_DOUBLE_EQ((unitless * withUnit).get_value(), 3.14 * 2.71);
+    EXPECT_DOUBLE_EQ((unitless / withUnit).get_value(), 3.14 / 2.71);
 }
 
 TEST(Primary, IncompatibleUnits)
@@ -214,6 +222,9 @@ TEST(Primary, IncompatibleUnits)
     EXPECT_THROW(a + b, Incompatible_units);
     EXPECT_THROW(a - b, Incompatible_units);
     EXPECT_THROW(b - a, Incompatible_units);
+
+    EXPECT_DOUBLE_EQ((a * b).get_value(), 3.14 * 2.17);
+    EXPECT_DOUBLE_EQ((a / b).get_value(), 3.14 / 2.17);
 }
 
 TEST(Primary, SameUnit)
@@ -231,6 +242,9 @@ TEST(Primary, SameUnit)
     EXPECT_DOUBLE_EQ((l1 + l2).get_value(), 3.14 + 2.17);
     EXPECT_DOUBLE_EQ((l1 - l2).get_value(), 3.14 - 2.17);
     EXPECT_DOUBLE_EQ((l2 - l1).get_value(), 2.17 - 3.14);
+
+    EXPECT_DOUBLE_EQ((l1 * l2).get_value(), 3.14 * 2.17);
+    EXPECT_DOUBLE_EQ((l1 / l2).get_value(), 3.14 / 2.17);
 }
 
 TEST(Primary, DifferentCompatibleUnits)
@@ -254,6 +268,11 @@ TEST(Primary, DifferentCompatibleUnits)
 
     EXPECT_NEAR((t1 + t2).get_value(), 597.5906 + 42.52, 0.01);
     EXPECT_NEAR((t1 - t2).get_value(), 597.5906 - 42.52, 0.01);
+
+    EXPECT_NEAR((t1 * t2).get_value(), 597.5906 * 42.52, 0.1);
+    EXPECT_NEAR((t1 / t2).get_value(), 597.5906 / 42.52, 0.1);
+    EXPECT_NEAR((t2 * t1).get_value(), 5.8444 * 314.217, 0.1);
+    EXPECT_NEAR((t2 / t1).get_value(), 597.5906 / 42.52, 0.1);
 }
 
 TEST(Primary, SameCompoundUnit)
@@ -278,6 +297,11 @@ TEST(Primary, SameCompoundUnit)
     EXPECT_DOUBLE_EQ((a + b).get_value(), 3.14 + 2.71);
     EXPECT_DOUBLE_EQ((a - b).get_value(), 3.14 - 2.71);
     EXPECT_DOUBLE_EQ((b - a).get_value(), -(3.14 - 2.71));
+
+    EXPECT_DOUBLE_EQ((a * b).get_value(), 3.14 * 2.71);
+    EXPECT_DOUBLE_EQ((b * a).get_value(), 3.14 * 2.71);
+    EXPECT_DOUBLE_EQ((a / b).get_value(), 3.14 / 2.71);
+    EXPECT_DOUBLE_EQ((b / a).get_value(), 2.71 / 3.14);
 }
 
 TEST(Primary, DifferentCompoundUnits)
@@ -311,6 +335,12 @@ TEST(Primary, DifferentCompoundUnits)
 
     EXPECT_NEAR((a + b).get_value(), 11.304 + 2.71, 0.01);
     EXPECT_NEAR((a - b).get_value(), 11.304 - 2.71, 0.01);
+
+    EXPECT_NEAR((a * b).get_value(), 11.304 * 2.71, 0.01);
+    EXPECT_NEAR((b * a).get_value(), 0.7527778 * 3.14, 0.01);
+
+    EXPECT_NEAR((a / b).get_value(), 11.304 / 2.71, 0.01);
+    EXPECT_NEAR((b / a).get_value(), 2.71 / 11.304, 0.01);
 }
 
 TEST(Primary, IncompatibleCompoundUnits)
@@ -345,6 +375,12 @@ TEST(Primary, IncompatibleCompoundUnits)
     EXPECT_THROW(a + b, Incompatible_units);
     EXPECT_THROW(a - b, Incompatible_units);
     EXPECT_THROW(b - a, Incompatible_units);
+
+    EXPECT_DOUBLE_EQ((a * b).get_value(), 0.00314 * 2.71);
+    EXPECT_DOUBLE_EQ((b * a).get_value(), 2710 * 3.14);
+
+    EXPECT_DOUBLE_EQ((a / b).get_value(), 0.00314 / 2.71);
+    EXPECT_DOUBLE_EQ((b / a).get_value(), 2.71 / 0.00314);
 }
 
 TEST(Primary, SameComplexUnit)
@@ -369,6 +405,12 @@ TEST(Primary, SameComplexUnit)
     EXPECT_DOUBLE_EQ((a + b).get_value(), 3.14 + 2.71);
     EXPECT_DOUBLE_EQ((a - b).get_value(), 3.14 - 2.71);
     EXPECT_DOUBLE_EQ((b - a).get_value(), -(3.14 - 2.71));
+
+    EXPECT_DOUBLE_EQ((a * b).get_value(), 3.14 * 2.71);
+    EXPECT_DOUBLE_EQ((b * a).get_value(), 3.14 * 2.71);
+
+    EXPECT_DOUBLE_EQ((a / b).get_value(), 3.14 / 2.71);
+    EXPECT_DOUBLE_EQ((b / a).get_value(), 2.71 / 3.14);
 }
 
 TEST(Primary, IncompatibleComplexUnits)
