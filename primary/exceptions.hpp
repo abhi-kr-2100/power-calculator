@@ -78,4 +78,20 @@ private:
     std::string what_err;
 };
 
+class Division_by_zero : public std::exception
+{
+public:
+    Division_by_zero(const std::string &s = "")
+        : what_err{s}
+    {
+    }
+
+    const char *what() const noexcept
+    {
+        return what_err.c_str();
+    }
+
+private:
+    std::string what_err;
+};
 #endif

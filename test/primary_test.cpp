@@ -271,7 +271,7 @@ TEST(Primary, DifferentCompatibleUnits)
     EXPECT_NEAR((t1 * t2).get_value(), 597.5906 * 42.52, 0.1);
     EXPECT_NEAR((t1 / t2).get_value(), 597.5906 / 42.52, 0.1);
     EXPECT_NEAR((t2 * t1).get_value(), 5.8444 * 314.217, 0.1);
-    EXPECT_NEAR((t2 / t1).get_value(), 597.5906 / 42.52, 0.1);
+    EXPECT_NEAR((t2 / t1).get_value(), 5.8444444 / 314.217, 0.1);
 }
 
 TEST(Primary, SameCompoundUnit)

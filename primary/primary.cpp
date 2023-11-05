@@ -169,12 +169,56 @@ Primary Primary::operator-(const Primary &other) const
 
 Primary Primary::operator*(const Primary &other) const
 {
-    return other;
+    if (unit_system != other.unit_system)
+    {
+        throw Incompatible_units{
+            "Primaries of different unit systems can't be multiplied."};
+    }
+
+    const auto units_of_other = get_combined_units(other.numerator_units,
+                                                   other.denominator_units);
+
+    const auto n_to_units = fill_units(units_of_other, numerator_units);
+    const auto nval = compound_convert(get_value(), unit_system,
+                                       numerator_units, n_to_units);
+
+    const auto d_to_units = fill_units(units_of_other, denominator_units);
+    const auto dval = compound_convert(1.0, unit_system,
+                                       denominator_units, d_to_units);
+
+    const auto new_value = nval / dval * other.get_value();
+
+    const auto new_numerator_units = units_union(numerator_units,
+                                                 other.numerator_units);
+    const auto new_denominator_units = units_union(denominator_units,
+                                                   other.denominator_units);
+
+    const auto simplified_numerator = units_difference(new_numerator_units,
+                                                       new_denominator_units);
+    const auto simplified_denominator = units_difference(new_denominator_units,
+                                                         new_numerator_units);
+
+    return Primary(new_value, unit_system,
+                   to_units_list(simplified_numerator),
+                   to_units_list(simplified_denominator));
 }
 
 Primary Primary::operator/(const Primary &other) const
 {
-    return other;
+    if (unit_system != other.unit_system)
+    {
+        throw Incompatible_units{
+            "Primaries of different unit systems can't be multiplied."};
+    }
+
+    if ((int)other.get_value() == 0)
+    {
+        throw Division_by_zero{"Division by 0 is not allowed."};
+    }
+
+    return (*this) * Primary(1.0 / other.get_value(), unit_system,
+                             to_units_list(other.denominator_units),
+                             to_units_list(other.numerator_units));
 }
 
 Primary Primary::operator%(const Primary &other) const
