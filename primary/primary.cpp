@@ -256,7 +256,13 @@ Primary Primary::operator%(const Primary &other) const
 
 Primary Primary::operator^(const Primary &other) const
 {
-    return other;
+    if (unit_system != other.unit_system)
+    {
+        throw Incompatible_units{
+            "Primaries of different unit systems can't be operated on by exponentiation."};
+    }
+
+    return power(get_value(), other.get_value());
 }
 
 Primary Primary::factorial() const

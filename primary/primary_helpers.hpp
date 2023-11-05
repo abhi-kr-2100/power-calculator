@@ -199,4 +199,45 @@ std::map<Unit_type, std::pair<std::string, size_t>> units_difference(
     return diffed;
 }
 
+/**
+ * Are the two given doubles almost equal?
+ */
+bool doubles_equal(double a, double b)
+{
+    return std::fabs(a - b) < std::numeric_limits<double>::epsilon();
+}
+
+/**
+ * Like std::pow but can take cube roots.
+ * Also, throws Invalid_operands on uncomputable powers.
+ *
+ * Rules for exponentiation:
+ *  - base is -ve and exp is non-integer and exp != 1/3 -> error
+ *  - base is -ve and exp == 1/3 -> std::cbrt(base)
+ *  - base is 0 and exp is non-positive -> error
+ *  - otherwise -> pow(base, exp)
+ */
+double power(double base, double exp)
+{
+    if (base < 0)
+    {
+        if (doubles_equal(exp, 1.0 / 3.0))
+        {
+            return std::cbrt(base);
+        }
+
+        if (!doubles_equal((long long)(exp), exp))
+        {
+            throw Invalid_operands{
+                "Can't compute fractional exponent of negative base."};
+        }
+    }
+    if (base == 0 && exp <= 0)
+    {
+        throw Invalid_operands{"Undefined exponent."};
+    }
+
+    return std::pow(base, exp);
+}
+
 #endif

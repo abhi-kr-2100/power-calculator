@@ -94,4 +94,22 @@ public:
 private:
     std::string what_err;
 };
+
+class Invalid_operands : public std::exception
+{
+public:
+    Invalid_operands(const std::string &s = "")
+        : what_err{s}
+    {
+    }
+
+    const char *what() const noexcept
+    {
+        return what_err.c_str();
+    }
+
+private:
+    std::string what_err;
+};
+
 #endif
