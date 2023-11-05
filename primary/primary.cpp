@@ -268,6 +268,12 @@ Primary Primary::operator^(const Primary &other) const
 
 Primary Primary::factorial() const
 {
+    if (value < 0)
+    {
+        throw Invalid_operands{
+            "Factorial is not defined for negative values."};
+    }
+
     return Primary(tgamma(get_value() + 1), unit_system);
 }
 
