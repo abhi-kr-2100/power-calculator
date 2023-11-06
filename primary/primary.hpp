@@ -6,7 +6,7 @@
  * This library provides the Primary UDT. It represents a numerical value
  * with an optional unit attached to it. Mathematical operations can be
  * performed on Primaries with compatible units. Compatibility between units
- * is determined by a UnitSystem provided to each Primary.
+ * is determined by a unit system provided to each Primary.
  */
 
 #include <string>
@@ -43,6 +43,9 @@ struct Unit_information
     double a;
     double x;
 
+    // Name of a unit is its only external identifying characteristic. Hence,
+    // in containers such as sets (and other similiar contexts), name is used
+    // to determine uniqueness.
     bool operator<(const Unit_information &other) const
     {
         return this->name < other.name;

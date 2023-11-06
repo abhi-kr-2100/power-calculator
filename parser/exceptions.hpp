@@ -2,10 +2,6 @@
 #define A2100_PCALC_PARSER_EXCEPTIONS 1
 #pragma once
 
-/**
- * This module contains exceptions thrown by the parser library.
- */
-
 #include <stdexcept>
 #include <string>
 

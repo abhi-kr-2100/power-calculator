@@ -78,8 +78,9 @@ bool contains(const vector<T> &v, const T &e)
     return find(v.begin(), v.end(), e) != v.end();
 }
 
-/** Used to indicate whether characters occuring inside parentheses should be
- * ignored.
+/**
+ * Used to indicate whether characters occuring inside parentheses should be
+ * ignored when conducting a search.
  */
 enum class Check_nesting
 {

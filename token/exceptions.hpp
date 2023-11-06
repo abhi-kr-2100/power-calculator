@@ -2,10 +2,6 @@
 #define A2100_PCALC_TOKEN_EXCEPTIONS 1
 #pragma once
 
-/**
- * This module contains exceptions thrown by the token library.
- */
-
 #include <stdexcept>
 #include <string>
 
