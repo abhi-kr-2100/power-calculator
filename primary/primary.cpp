@@ -1,5 +1,6 @@
 #include <string>
 #include <algorithm>
+#include <ostream>
 #include <cmath>
 
 #include <boost/uuid/uuid_generators.hpp>
@@ -14,6 +15,7 @@ using boost::uuids::random_generator;
 using std::find_if;
 using std::fmod;
 using std::less;
+using std::ostream;
 using std::string;
 using std::tgamma;
 
@@ -287,4 +289,27 @@ Primary Primary::operator-() const
     return Primary(-get_value(), unit_system,
                    to_units_list(numerator_units),
                    to_units_list(denominator_units));
+}
+
+ostream &operator<<(ostream &out, const Primary &self)
+{
+    const auto nunits = units_to_str(self.numerator_units);
+    const auto dunits = units_to_str(self.denominator_units);
+
+    if (nunits.size() == 0 && dunits.size() == 0)
+    {
+        return out << self.get_value();
+    }
+
+    if (nunits.size() == 0)
+    {
+        return out << self.get_value() << "/" << dunits;
+    }
+
+    if (dunits.size() == 0)
+    {
+        return out << self.get_value() << " " << nunits;
+    }
+
+    return out << self.get_value() << " " << nunits << " / " << dunits;
 }

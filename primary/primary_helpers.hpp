@@ -240,4 +240,31 @@ double power(double base, double exp)
     return std::pow(base, exp);
 }
 
+std::string units_to_str(
+    const std::map<Unit_type, std::pair<std::string, size_t>> &units)
+{
+    std::string str;
+
+    for (const auto &[base, unit_desc] : units)
+    {
+        if (unit_desc.second < 1)
+        {
+            continue;
+        }
+
+        if (str.size() != 0)
+        {
+            str += " ";
+        }
+
+        str += unit_desc.first;
+        if (unit_desc.second > 1)
+        {
+            str += "^" + std::to_string(unit_desc.second);
+        }
+    }
+
+    return str;
+}
+
 #endif

@@ -13,6 +13,7 @@
 #include <set>
 #include <map>
 #include <utility>
+#include <ostream>
 
 #include <boost/uuid/uuid.hpp>
 
@@ -98,6 +99,8 @@ public:
     Primary operator%(const Primary &other) const;
     Primary operator^(const Primary &other) const;
     Primary factorial() const;
+
+    friend std::ostream &operator<<(std::ostream &out, const Primary &self);
 
     double get_value() const;
 
