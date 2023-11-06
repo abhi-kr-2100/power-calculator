@@ -19,6 +19,23 @@ using std::exit;
 using std::getline;
 using std::string;
 
+void calculate(Parser &calc);
+
+void add_units_to_parser(Parser &calc);
+
+int main()
+{
+    cout << "Welcome to Power Calculator!\n";
+
+    Parser calc;
+    add_units_to_parser(calc);
+
+    while (true)
+    {
+        calculate(calc);
+    }
+}
+
 /**
  * Display prompt -> take input -> print result/error.
  */
@@ -54,7 +71,7 @@ void calculate(Parser &calc)
     }
 }
 
-void add_units(Parser &calc)
+void add_units_to_parser(Parser &calc)
 {
     calc.unit_system.add_new_unit(
         Unit_information{
@@ -139,17 +156,4 @@ void add_units(Parser &calc)
             "fahrenheit",
             Unit_type::temperature,
             -32.0 * 5.0 / 9.0, 5.0 / 9.0});
-}
-
-int main()
-{
-    cout << "Welcome to Power Calculator!\n";
-
-    Parser calc;
-    add_units(calc);
-
-    while (true)
-    {
-        calculate(calc);
-    }
 }
