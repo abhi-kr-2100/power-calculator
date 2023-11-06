@@ -1,9 +1,10 @@
 #ifndef A2100_PCALC_TOKEN_EXCEPTIONS
-#define A2100_PCALC_TOKEN_EXCEPTIONS   1
+#define A2100_PCALC_TOKEN_EXCEPTIONS 1
+#pragma once
 
 /**
  * This module contains exceptions thrown by the token library.
-*/
+ */
 
 #include <stdexcept>
 #include <string>
@@ -16,10 +17,11 @@ public:
     {
     }
 
-    const char* what() const noexcept
+    const char *what() const noexcept
     {
         return what_err.c_str();
     }
+
 private:
     std::string what_err;
 };
@@ -32,10 +34,11 @@ public:
     {
     }
 
-    const char* what() const noexcept
+    const char *what() const noexcept
     {
         return what_err.c_str();
     }
+
 private:
     std::string what_err;
 };

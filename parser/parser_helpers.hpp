@@ -1,5 +1,6 @@
 #ifndef A2100_PCALC_PARSER_HELPERS
 #define A2100_PCALC_PARSER_HELPERS 1
+#pragma once
 
 #include <limits>
 #include <utility>

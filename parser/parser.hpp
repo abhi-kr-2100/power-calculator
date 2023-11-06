@@ -1,5 +1,6 @@
 #ifndef A2100_PCALC_PARSER
 #define A2100_PCALC_PARSER 1
+#pragma once
 
 /**
  * This library provides:

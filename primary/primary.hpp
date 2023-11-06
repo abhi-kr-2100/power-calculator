@@ -1,5 +1,6 @@
 #ifndef A2100_PCALC_PRIMARY
 #define A2100_PCALC_PRIMARY 1
+#pragma once
 
 /**
  * This library provides the Primary UDT. It represents a numerical value

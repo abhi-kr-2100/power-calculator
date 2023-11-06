@@ -1,5 +1,6 @@
 #ifndef A2100_PCALC_PRIMARY_HELPERS
 #define A2100_PCALC_PRIMARY_HELPERS 1
+#pragma once
 
 #include <set>
 #include <string>

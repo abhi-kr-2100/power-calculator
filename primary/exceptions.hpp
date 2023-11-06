@@ -1,5 +1,6 @@
 #ifndef A2100_PCALC_PRIMARY_EXCEPTIONS
 #define A2100_PCALC_PRIMARY_EXCEPTIONS 1
+#pragma once
 
 #include <stdexcept>
 #include <string>
