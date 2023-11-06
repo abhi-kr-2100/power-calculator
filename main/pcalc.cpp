@@ -45,7 +45,7 @@ void calculate(Parser &calc)
 
     try
     {
-        double result = calc.evaluate(expr).get_value();
+        const auto result = calc.evaluate(expr);
         cout << answer << result << "\n";
     }
     catch (exception &ex)
