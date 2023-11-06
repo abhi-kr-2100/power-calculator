@@ -84,9 +84,10 @@ public:
     // the keyword used to introduce a new variable
     inline static const std::string var_declaration_key = "let";
 
+    Unit_system unit_system;
+
 private:
     std::map<std::string, Primary> variables_table;
-    Unit_system unit_system;
 
     Primary variable_declaration(const Token_iter &s, const Token_iter &e,
                                  std::map<std::string, Primary> &variables_table);

@@ -160,9 +160,13 @@ Primary Parser::primary(const Token_iter &s, const Token_iter &e,
         return arg.factorial();
     }
 
+    /**
+     * A primary followed by a unit.
+     */
     if ((e - 1)->kind == Token_type::identifier && s != (e - 1))
     {
-        return primary(s, e - 1, variables_table);
+        return Primary(primary(s, e - 1, variables_table).get_value(),
+                       unit_system, (e - 1)->name);
     }
 
     if (s->kind == Token_type::number || s->kind == Token_type::identifier)
