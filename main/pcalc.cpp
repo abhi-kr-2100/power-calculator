@@ -140,6 +140,26 @@ void add_units_to_parser(Parser &calc)
             "hour",
             Unit_type::time,
             0, 3600});
+    calc.unit_system.add_new_unit(
+        Unit_information{
+            "day",
+            Unit_type::time,
+            0, 24.0 * 60 * 60});
+    calc.unit_system.add_new_unit(
+        Unit_information{
+            "week",
+            Unit_type::time,
+            0, 7 * 24.0 * 60 * 60});
+    calc.unit_system.add_new_unit(
+        Unit_information{
+            "fortnight",
+            Unit_type::time,
+            0, 14.0 * 24 * 60 * 60});
+    calc.unit_system.add_new_unit(
+        Unit_information{
+            "year",
+            Unit_type::time,
+            0, 365.2425 * 24 * 60 * 60});
 
     calc.unit_system.add_new_unit(
         Unit_information{
