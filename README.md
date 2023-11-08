@@ -4,7 +4,7 @@ Power calculator or `pcalc` is a powerful, feature-heavy console calculator.
 
 ## Features
 
-Version 2.0.1 of `pcalc` supports the following features:
+Version 2.1.0 of `pcalc` supports the following features:
 
 * Basic arithmetic alongside exponentiation, float mod, and float factorial
 * User-defined variables
@@ -83,3 +83,48 @@ A few things to note:
 * Variable assignment can be part of an expression: `(x = 5) * 3` gives `15`.
 * When units are involved, the output uses the units of the last operand.
 * Units lose their meaning in the context of exponentiation and factorial.
+
+## Supported Units
+
+The following units are supported:
+
+### Length
+
+* meter
+* kilometer
+* inch
+* foot
+* mile
+* league
+
+### Mass
+
+* kilogram
+* gram
+* tonne
+* pound
+
+### Time
+
+* second
+* minute
+* hour
+* day
+* week
+* fortnight
+* year
+
+### Temperature
+
+* kelvin
+* celsius
+* fahrenheit
+
+### Information
+
+* bit
+* byte
+* kilobyte
+* megabyte
+* gigabyte
+* terabyte
