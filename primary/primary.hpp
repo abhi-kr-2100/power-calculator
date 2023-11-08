@@ -26,7 +26,8 @@ enum class Unit_type
     electricCurrent,
     temperature,
     amountOfSubstance,
-    lightIntensity
+    lightIntensity,
+    information,
 };
 
 /**

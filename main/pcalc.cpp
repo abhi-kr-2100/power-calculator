@@ -156,4 +156,35 @@ void add_units_to_parser(Parser &calc)
             "fahrenheit",
             Unit_type::temperature,
             -32.0 * 5.0 / 9.0, 5.0 / 9.0});
+
+    calc.unit_system.add_new_unit(
+        Unit_information{
+            "byte",
+            Unit_type::information,
+            0, 1});
+    calc.unit_system.add_new_unit(
+        Unit_information{
+            "bit",
+            Unit_type::information,
+            0, 1.0 / 8.0});
+    calc.unit_system.add_new_unit(
+        Unit_information{
+            "kilobyte",
+            Unit_type::information,
+            0, 1024});
+    calc.unit_system.add_new_unit(
+        Unit_information{
+            "megabyte",
+            Unit_type::information,
+            0, 1024.0 * 1024});
+    calc.unit_system.add_new_unit(
+        Unit_information{
+            "gigabyte",
+            Unit_type::information,
+            0, 1024.0 * 1024 * 1024});
+    calc.unit_system.add_new_unit(
+        Unit_information{
+            "terabyte",
+            Unit_type::information,
+            0, 1024.0 * 1024 * 1024 * 1024});
 }
